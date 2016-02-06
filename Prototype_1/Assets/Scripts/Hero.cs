@@ -5,14 +5,16 @@ public class Hero : MonoBehaviour {
 
     private float speed = 5f;
     private Rigidbody body;
+    private HealthBar bar;
 
-	// Use this for initialization
-	void Start () {
+	void Start ()
+    {
+        bar = FindObjectOfType<HealthBar>();
 	    body = GetComponent<Rigidbody>();
 	}
 	
-	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
         Move();
 	}
 

@@ -13,16 +13,6 @@ public class HealthBar : Bar {
         return 2f;
     }
 
-    protected override Texture2D GetFullTexture()
-    {
-        return full;
-    }
-
-    protected override Texture2D GetEmptyTexture()
-    {
-        return empty;
-    }
-
     protected override Vector2 GetLocation()
     {
         return new Vector2(10, 10);

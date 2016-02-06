@@ -8,8 +8,6 @@ public abstract class Bar : MonoBehaviour {
 
     protected abstract int GetMax();
     protected abstract float GetFracOfScreen();
-    protected abstract Texture2D GetFullTexture();
-    protected abstract Texture2D GetEmptyTexture();
     protected abstract Vector2 GetLocation();
 
 	// Use this for initialization

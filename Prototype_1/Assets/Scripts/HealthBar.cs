@@ -3,8 +3,6 @@ using System.Collections;
 
 public class HealthBar : Bar {
 
-    public Texture2D full, empty;
-
     protected override int GetMax()
     {
         return 10;

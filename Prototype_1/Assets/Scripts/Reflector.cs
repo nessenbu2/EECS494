@@ -10,15 +10,17 @@ public class Reflector : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-
+		Debug.DrawLine(transform.rotation * Vector3.right, transform.rotation * Vector3.right, Color.red, Mathf.Infinity);
 	}
 
-	void OnTriggerStay(Collider coll) {
-		// x direction of the reflector is away from hero
-		Vector3 dir = transform.rotation * Vector3.right;
+	void OnTriggerEnter(Collider coll) {
 		if (coll.attachedRigidbody)
 		{
-			coll.attachedRigidbody.AddForce(dir * 40, ForceMode.Impulse);
+			// Redirect velocity to hero's x direction, same magnitude as before
+			Vector3 dir = transform.rotation * Vector3.right;
+			Vector3 vel = dir * coll.GetComponent<Rigidbody>().velocity.magnitude;
+
+			coll.GetComponent<Rigidbody>().velocity = vel;
 		}
 	}
 }

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class Hero : MonoBehaviour {
@@ -6,6 +6,11 @@ public class Hero : MonoBehaviour {
     private float speed = 5f;
     private Rigidbody body;
     private HealthBar bar;
+
+	public GameObject reflectorPrefab;
+	float reflectorCooldown = 0.75f;
+	float lastRefl;
+	float spawnDist = 1f;
 
 	void Start ()
     {
@@ -16,6 +21,20 @@ public class Hero : MonoBehaviour {
 	void Update ()
     {
         Move();
+
+		if (Input.GetKey(KeyCode.Space) && Time.time - lastRefl > reflectorCooldown)
+		{
+			spawnReflector();
+		}
+	}
+
+	private void spawnReflector()
+	{
+		lastRefl = Time.time;
+		GameObject refl = Instantiate<GameObject>(reflectorPrefab);
+		Vector3 pos = transform.position + transform.right * spawnDist;
+		refl.transform.position = pos;
+		refl.transform.rotation = transform.rotation;
 	}
 
     private void Move()

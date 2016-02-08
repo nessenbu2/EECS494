@@ -22,6 +22,7 @@ public class EnemyBase : MonoBehaviour
 
     [Header("EnemyBase: Dynamically Set General Fields")]
     public Rigidbody rigid;
+	public EnemySpawner enemySpawn;
 
     [Header("EnemyBase: Dynamically Set General Firing Fields")]
     public float elapsedFireTime;
@@ -45,6 +46,11 @@ public class EnemyBase : MonoBehaviour
 
         return;
     }
+
+	void Start()
+	{
+		poi = GameObject.Find("Hero");
+	}
 
     // Update will keep shooting as fluid as possible
     // keeping within a set timer.

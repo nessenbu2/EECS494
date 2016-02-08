@@ -41,4 +41,9 @@ public class BasicEnemy : EnemyBase
         }
         return;
     }
+
+	protected override void onDeath()
+	{
+		enemySpawn.enemy = null;
+	}
 }

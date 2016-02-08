@@ -3,39 +3,68 @@ using System.Collections;
 
 public class Hero : MonoBehaviour {
 
+    public GameObject reflectorPrefab;
+    public static Hero hero;
+
     private float speed = 5f;
     private Rigidbody body;
     private HealthBar bar;
+    private int maxHealth, health, bulletLayer;
 
-	public GameObject reflectorPrefab;
-	float reflectorCooldown = 0.75f;
-	float lastRefl;
-	float spawnDist = 1f;
+    private float reflectorCooldown = 0.75f;
+    private float lastRefl;
+    private float spawnDist = 1f;
 
-	void Start ()
+    private Camera cam;
+
+    public int GetMaxHealth()
+    {
+        return maxHealth;
+    }
+
+    void Awake()
+    {
+        bulletLayer = LayerMask.NameToLayer("Bullet");
+    }
+
+    void Start()
     {
         bar = FindObjectOfType<HealthBar>();
-	    body = GetComponent<Rigidbody>();
-	}
-	
-	void Update ()
+        cam = FindObjectOfType<Camera>();
+        body = GetComponent<Rigidbody>();
+        hero = this;
+        health = maxHealth = 10;
+    }
+    
+    void Update()
     {
         Move();
 
-		if (Input.GetKey(KeyCode.Space) && Time.time - lastRefl > reflectorCooldown)
-		{
-			spawnReflector();
-		}
-	}
+        FaceCursor();
 
-	private void spawnReflector()
-	{
-		lastRefl = Time.time;
-		GameObject refl = Instantiate<GameObject>(reflectorPrefab);
-		Vector3 pos = transform.position + transform.right * spawnDist;
-		refl.transform.position = pos;
-		refl.transform.rotation = transform.rotation;
-	}
+        if (Input.GetKey(KeyCode.Space) && Time.time - lastRefl > reflectorCooldown)
+        {
+            spawnReflector();
+        }
+    }
+
+    void OnTriggerEnter(Collider col)
+    {
+        if (col.gameObject.layer == bulletLayer)
+        {
+            health -= 1;    // TODO Make a better way to determine the amount of damage
+            bar.Remove(1);  // Maybe a static class functions?
+        }
+    }
+
+    private void spawnReflector()
+    {
+        lastRefl = Time.time;
+        GameObject refl = Instantiate<GameObject>(reflectorPrefab);
+        Vector3 pos = transform.position + transform.right * spawnDist;
+        refl.transform.position = pos;
+        refl.transform.rotation = transform.rotation;
+    }
 
     private void Move()
     {
@@ -68,5 +97,17 @@ public class Hero : MonoBehaviour {
         }
 
         body.velocity = vel;
+    }
+
+    private void FaceCursor()
+    {
+        Vector3 temp = new Vector3(
+                    Input.mousePosition.x,
+                    Input.mousePosition.y,
+                    (transform.position - cam.transform.position).magnitude);
+
+        Vector3 target = cam.ScreenToWorldPoint(temp);
+        target.z = transform.position.z;
+        transform.LookAt(target);
     }
 }

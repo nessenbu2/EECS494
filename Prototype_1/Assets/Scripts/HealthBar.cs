@@ -5,7 +5,7 @@ public class HealthBar : Bar {
 
     protected override int GetMax()
     {
-        return 10;
+        return Hero.hero.GetMaxHealth();
     }
 
     protected override float GetFracOfScreen()

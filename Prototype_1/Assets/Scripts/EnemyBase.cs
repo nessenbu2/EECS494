@@ -5,13 +5,25 @@ public class EnemyBase : MonoBehaviour
     [Header("EnemyBase: Inspector Set General Fields")]
     public GameObject poi;
 
+    [Header("EnemyBase: Inspector Set General Firing Fields")]
+    public GameObject bullet;
+    public float timeBetweenBulletShots = 1.0f;
+
     [Header("EnemyBase: Inspector Set General Movement Fields")]
-    public float timeBetweenForceShift = 1.0f;
     public float newForceWeight = 0.1f;
     public float maxSpeed = 2.0f;
 
+    [Header("EnemyBase: Inspector Set Wander Movement Fields")]
+    public float timeBetweenForceShift = 1.0f;
+
+    [Header("EnemyBase: Inspector Set Aggro Movement Fields")]
+    public float aggroReflectTime = 1.0f;
+
     [Header("EnemyBase: Dynamically Set Sub-Objects")]
     public Rigidbody rigid;
+
+    [Header("EnemyBase: Dynamically Set General Firing Fields")]
+    public float elapsedFireTime;
 
     [Header("EnemyBase: Dynamically Set General Movement Fields")]
     public Vector3 currentForce;
@@ -27,6 +39,7 @@ public class EnemyBase : MonoBehaviour
         // Ensure that the force "shifts" immediately,
         // i.e. give it an initial random force.
         elapsedForceShiftTime = timeBetweenForceShift;
+        elapsedFireTime = timeBetweenBulletShots;
         currentCollision = null;
 
         return;
@@ -88,9 +101,13 @@ public class EnemyBase : MonoBehaviour
 
             currentCollision = null;
             elapsedForceShiftTime = 0f;
+
+            rigid.velocity = (1 - newForceWeight) * rigid.velocity +
+                newForceWeight * currentForce;
+            return;
         }
 
-        elapsedForceShiftTime += Time.deltaTime;
+        elapsedForceShiftTime += Time.fixedDeltaTime;
 
         if (elapsedForceShiftTime >= timeBetweenForceShift)
         {
@@ -112,16 +129,43 @@ public class EnemyBase : MonoBehaviour
 
         rigid.velocity = (1 - newForceWeight) * rigid.velocity +
             newForceWeight * currentForce;
-
         return;
     }
 
     // This function performs the aggro movement action.
-    // The enemy moves toward the poi up to a certain radius.
-    // At this radius, the enemy will attempt to circle the poi.
+    // The enemy moves toward the poi.
     // This is assumed to only ever be called through FixedUpdate().
     protected void aggroMovement()
     {
+        elapsedForceShiftTime += Time.fixedDeltaTime;
+
+        if (elapsedForceShiftTime >= aggroReflectTime)
+        {
+            if (currentCollision != null)
+            {
+                currentForce = Vector3.Reflect(
+                currentForce, currentCollision.contacts[0].normal);
+
+                currentForce.Normalize();
+                currentForce *= maxSpeed;
+
+                currentCollision = null;
+                elapsedForceShiftTime = 0f;
+
+                rigid.velocity = (1 - newForceWeight) * rigid.velocity +
+                    newForceWeight * currentForce;
+                return;
+            }
+
+            elapsedForceShiftTime = aggroReflectTime;
+
+            currentForce = poi.transform.position - transform.position;
+            currentForce.Normalize();
+            currentForce *= maxSpeed;
+        }
+
+        rigid.velocity = (1 - newForceWeight) * rigid.velocity +
+            newForceWeight * currentForce;
         return;
     }
 
@@ -130,6 +174,25 @@ public class EnemyBase : MonoBehaviour
     // This is assumed to only ever be called through Update().
     protected void standardDirectShot()
     {
+        if (elapsedFireTime < timeBetweenBulletShots)
+        {
+            return;
+        }
+        elapsedFireTime = 0f;
 
+        GameObject goBullet = Instantiate(bullet);
+        Rigidbody bulletRigid = goBullet.GetComponent<Rigidbody>();
+        BulletBase bulletBase = goBullet.GetComponent<BulletBase>();
+
+        goBullet.transform.position = transform.position;
+        bulletBase.originEnemy = gameObject;
+
+        Vector3 vel = bulletRigid.velocity;
+        vel = poi.transform.position - transform.position;
+        vel.Normalize();
+        vel *= bulletBase.bulletSpeed;
+        bulletRigid.velocity = vel;
+
+        return;
     }
 }

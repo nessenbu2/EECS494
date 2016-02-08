@@ -6,16 +6,22 @@ public class BasicEnemy : EnemyBase
     [Header("BasicEnemy: Inspector Set Firing Fields")]
     public float fireRadius = 1f;
 
+    [Header("BasicEnemy: Inspector Set Movement Fields")]
+    public float aggroRadius = 2f;
+
     // This virtual function fires this enemy's weapon.
     // Here in BasicEnemy, this simply fires directly
     // at the poi when within a certain radius.
     protected override void fire()
     {
+        elapsedFireTime += Time.deltaTime;
+
         if (Vector3.Magnitude(poi.transform.position - transform.position) <=
             fireRadius)
         {
             standardDirectShot();
         }
+
         return;
     }
 
@@ -24,7 +30,15 @@ public class BasicEnemy : EnemyBase
     // depending on distance to the poi.
     protected override void move()
     {
-        wanderMovement();
+        if (Vector3.Magnitude(poi.transform.position - transform.position) <=
+            aggroRadius)
+        {
+            aggroMovement();
+        }
+        else
+        {
+            wanderMovement();
+        }
         return;
     }
 }

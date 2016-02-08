@@ -4,6 +4,7 @@ public class EnemyBase : MonoBehaviour
 {
     [Header("EnemyBase: Inspector Set General Fields")]
     public GameObject poi;
+    public int health = 1;
 
     [Header("EnemyBase: Inspector Set General Firing Fields")]
     public GameObject bullet;
@@ -19,7 +20,7 @@ public class EnemyBase : MonoBehaviour
     [Header("EnemyBase: Inspector Set Aggro Movement Fields")]
     public float aggroReflectTime = 1.0f;
 
-    [Header("EnemyBase: Dynamically Set Sub-Objects")]
+    [Header("EnemyBase: Dynamically Set General Fields")]
     public Rigidbody rigid;
 
     [Header("EnemyBase: Dynamically Set General Firing Fields")]
@@ -70,6 +71,26 @@ public class EnemyBase : MonoBehaviour
         return;
     }
 
+    // Deal with being hit by a bullet.
+    // If this enemy dies, it acts as a non-virtual interface
+    // to deal with on-death actions.
+    void OnTriggerEnter(Collider other)
+    {
+        // We are likely to change self-damage rules for enemy bullets.
+        BulletBase bullet = other.gameObject.GetComponent<BulletBase>();
+        if ((bullet != null) && (bullet.originEnemy != gameObject))
+        {
+            health -= bullet.bulletDamage;
+            if (health <= 0)
+            {
+                onDeath();
+                Destroy(gameObject);
+            }
+        }
+
+        return;
+    }
+
     // This virtual function fires this enemy's weapon.
     // The base behavior is nothing, it must be overriden
     // if an enemy is too shoot.
@@ -82,6 +103,13 @@ public class EnemyBase : MonoBehaviour
     // The base behavior is nothing, it must be overriden
     // if an enemy is to move.
     protected virtual void move()
+    {
+        return;
+    }
+
+    // This virtual function performs on-death actions.
+    // The base behavior is nothing (destruction happens elsewhere).
+    protected virtual void onDeath()
     {
         return;
     }

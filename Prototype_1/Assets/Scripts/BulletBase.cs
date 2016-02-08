@@ -6,6 +6,7 @@ public class BulletBase : MonoBehaviour
 {
     [Header("BulletBase: Inspector Set Fields")]
     public float bulletSpeed = 2.0f;
+    public int bulletDamage = 1;
 
     [Header("BulletBase: Dynamically Set Fields")]
     public GameObject originEnemy;

@@ -49,7 +49,10 @@ public abstract class Bar : MonoBehaviour {
     private GUIStyle MakeStyle(int x, int y)
     {
         GUIStyle style = new GUIStyle(GUI.skin.box);
-        style.normal.background = MakeTexture(x, y);
+
+        if (x != 0 && y != 0)
+            style.normal.background = MakeTexture(x, y);
+
         style.normal.textColor = GetTextColor();
         return style;
     }

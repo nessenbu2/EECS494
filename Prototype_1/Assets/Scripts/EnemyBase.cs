@@ -2,15 +2,19 @@
 
 public class EnemyBase : MonoBehaviour
 {
-    [Header("Inspector Fields")]
+    [Header("EnemyBase: Inspector Set General Fields")]
+    public GameObject poi;
+
+    [Header("EnemyBase: Inspector Set General Movement Fields")]
     public float timeBetweenForceShift = 1.0f;
     public float newForceWeight = 0.1f;
     public float maxSpeed = 2.0f;
 
-    [Header("Dynamic Fields")]
+    [Header("EnemyBase: Dynamically Set Sub-Objects")]
     public Rigidbody rigid;
-    public Vector3 currentForce;
 
+    [Header("EnemyBase: Dynamically Set General Movement Fields")]
+    public Vector3 currentForce;
     public float elapsedForceShiftTime;
     public Collision currentCollision;
 
@@ -25,6 +29,15 @@ public class EnemyBase : MonoBehaviour
         elapsedForceShiftTime = timeBetweenForceShift;
         currentCollision = null;
 
+        return;
+    }
+
+    // Update will keep shooting as fluid as possible
+    // keeping within a set timer.
+    // This is a non-virtual interface allowing easy fire control.
+    void Update()
+    {
+        fire();
         return;
     }
 
@@ -44,6 +57,14 @@ public class EnemyBase : MonoBehaviour
         return;
     }
 
+    // This virtual function fires this enemy's weapon.
+    // The base behavior is nothing, it must be overriden
+    // if an enemy is too shoot.
+    protected virtual void fire()
+    {
+        return;
+    }
+
     // This virtual function moves this enemy.
     // The base behavior is nothing, it must be overriden
     // if an enemy is to move.
@@ -53,7 +74,8 @@ public class EnemyBase : MonoBehaviour
     }
 
     // This function performs the wander movement action.
-    // This assumed to only ever be called through FixedUpdate().
+    // The enemy moves in a fluid manner in random directions.
+    // This is assumed to only ever be called through FixedUpdate().
     protected void wanderMovement()
     {
         if (currentCollision != null)
@@ -65,6 +87,7 @@ public class EnemyBase : MonoBehaviour
             currentForce *= maxSpeed;
 
             currentCollision = null;
+            elapsedForceShiftTime = 0f;
         }
 
         elapsedForceShiftTime += Time.deltaTime;
@@ -91,5 +114,22 @@ public class EnemyBase : MonoBehaviour
             newForceWeight * currentForce;
 
         return;
+    }
+
+    // This function performs the aggro movement action.
+    // The enemy moves toward the poi up to a certain radius.
+    // At this radius, the enemy will attempt to circle the poi.
+    // This is assumed to only ever be called through FixedUpdate().
+    protected void aggroMovement()
+    {
+        return;
+    }
+
+    // This function performs a standard direct shot at the poi.
+    // The enemy shoots directly at the poi.
+    // This is assumed to only ever be called through Update().
+    protected void standardDirectShot()
+    {
+
     }
 }

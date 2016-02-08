@@ -6,34 +6,48 @@ public class Hero : MonoBehaviour {
     public GameObject reflectorPrefab;
     public static Hero hero;
 
+
     private float speed = 5f;
     private Rigidbody body;
-    private HealthBar bar;
-    private int maxHealth, health, bulletLayer;
+    private HealthBar healthBar;
+    private StaminaBar staminaBar;
+    private int _maxHealth, health, bulletLayer, _maxStamina, stamina;
 
     private float reflectorCooldown = 0.75f;
     private float lastRefl;
     private float spawnDist = 1f;
+	private int reflCost = 20;
+
+	private bool staminaFrame = true;
+	private float staminaTick;
+	private float staminaCooldown = 0.1f;
 
     private Camera cam;
 
-    public int GetMaxHealth()
+    public int maxHealth
     {
-        return maxHealth;
+		get { return _maxHealth; }
     }
+
+	public int maxStamina
+	{
+		get { return _maxStamina; }
+	}
 
     void Awake()
     {
         bulletLayer = LayerMask.NameToLayer("Bullet");
+        hero = this;
+        health = _maxHealth = 10;
+		stamina = _maxStamina = 100;
     }
 
     void Start()
     {
-        bar = FindObjectOfType<HealthBar>();
+        healthBar = FindObjectOfType<HealthBar>();
+		staminaBar = FindObjectOfType<StaminaBar>();
         cam = FindObjectOfType<Camera>();
         body = GetComponent<Rigidbody>();
-        hero = this;
-        health = maxHealth = 10;
     }
     
     void Update()
@@ -44,16 +58,33 @@ public class Hero : MonoBehaviour {
 
         if (Input.GetKey(KeyCode.Space) && Time.time - lastRefl > reflectorCooldown)
         {
-            spawnReflector();
+			if (stamina >= reflCost)
+				spawnReflector();
         }
+
     }
+
+	void FixedUpdate()
+	{
+		if (Time.time - staminaTick < staminaCooldown)
+		{
+			return;
+		}
+
+		staminaTick = Time.time;
+		if (stamina < maxStamina)
+		{
+			stamina += 1;
+			staminaBar.Add(1);
+		}
+	}
 
     void OnTriggerEnter(Collider col)
     {
         if (col.gameObject.layer == bulletLayer)
         {
             health -= 1;    // TODO Make a better way to determine the amount of damage
-            bar.Remove(1);  // Maybe a static class functions?
+            healthBar.Remove(1);  // Maybe a static class functions?
         }
     }
 
@@ -64,6 +95,9 @@ public class Hero : MonoBehaviour {
         Vector3 pos = transform.position + transform.right * spawnDist;
         refl.transform.position = pos;
         refl.transform.rotation = transform.rotation;
+
+		stamina -= 20;
+		staminaBar.Remove(20);
     }
 
     private void Move()
@@ -108,6 +142,7 @@ public class Hero : MonoBehaviour {
 
         Vector3 target = cam.ScreenToWorldPoint(temp);
         target.z = transform.position.z;
-        transform.LookAt(target);
+        transform.LookAt(target, transform.up);
+		transform.rotation *= Quaternion.Euler(new Vector3(0, -90, 0));
     }
 }

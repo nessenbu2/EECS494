@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 // Having this base class will allows us
 // to add different types of bullets later.
@@ -24,6 +24,11 @@ public class BulletBase : MonoBehaviour
         
         hitEntity(other);
     }
+
+    void OnTriggerExit(Collider other)
+	{
+		originEnemy = null;
+	}
 
     // This virtual method allows different bullets to be made
     // that deal different with hitting another entity.

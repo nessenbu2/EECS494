@@ -11,7 +11,9 @@ public class Hero : MonoBehaviour {
     private Rigidbody body;
     private HealthBar healthBar;
     private StaminaBar staminaBar;
-    private int _maxHealth, health, bulletLayer, _maxStamina, stamina;
+    private int _maxHealth, health;
+	private int _maxStamina, stamina;
+	private int bulletLayer, enemyLayer;
 
     private float reflectorCooldown = 0.75f;
     private float lastRefl;
@@ -21,6 +23,8 @@ public class Hero : MonoBehaviour {
 	private bool staminaFrame = true;
 	private float staminaTick;
 	private float staminaCooldown = 0.1f;
+
+	private Reflector reflector;
 
     private Camera cam;
 
@@ -40,6 +44,7 @@ public class Hero : MonoBehaviour {
         hero = this;
         health = _maxHealth = 10;
 		stamina = _maxStamina = 100;
+		reflector = transform.Find("Reflector").GetComponent<Reflector>();
     }
 
     void Start()
@@ -83,18 +88,28 @@ public class Hero : MonoBehaviour {
     {
         if (col.gameObject.layer == bulletLayer)
         {
-            health -= 1;    // TODO Make a better way to determine the amount of damage
-            healthBar.Remove(1);  // Maybe a static class functions?
+			takeDamage(1);
         }
     }
+
+    void OnCollisionEnter(Collision col)
+    {
+        if (col.gameObject.layer == enemyLayer)
+        {
+			takeDamage(1);
+        }
+    }
+
+	private void takeDamage(int damage)
+	{
+		health -= damage;
+		healthBar.Remove(damage);
+	}
 
     private void spawnReflector()
     {
         lastRefl = Time.time;
-        GameObject refl = Instantiate<GameObject>(reflectorPrefab);
-        Vector3 pos = transform.position + transform.right * spawnDist;
-        refl.transform.position = pos;
-        refl.transform.rotation = transform.rotation;
+		reflector.initReflector();
 
 		stamina -= 20;
 		staminaBar.Remove(20);

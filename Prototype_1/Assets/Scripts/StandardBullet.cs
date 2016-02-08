@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public class StandardBullet : BulletBase
 {
@@ -6,7 +6,11 @@ public class StandardBullet : BulletBase
     // is to destroy itself when it hits something.
     protected override void hitEntity(Collider other)
     {
-        Destroy(gameObject);
-        return;
+		if (LayerMask.NameToLayer("Reflector") != other.gameObject.layer
+				&& LayerMask.NameToLayer("Bullet") != other.gameObject.layer)
+		{
+			Destroy(gameObject);
+			return;
+		}
     }
 }

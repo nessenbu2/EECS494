@@ -1,11 +1,11 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class HealthBar : Bar {
 
     protected override int GetMax()
     {
-        return Hero.hero.GetMaxHealth();
+        return Hero.hero.maxHealth;
     }
 
     protected override float GetFracOfScreen()

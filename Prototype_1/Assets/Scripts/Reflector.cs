@@ -3,14 +3,13 @@ using System.Collections;
 
 public class Reflector : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		Destroy(gameObject, 0.5f);
-	}
+	float initTime;
+	float duration = 0.5f;
 
 	// Update is called once per frame
 	void Update () {
-		Debug.DrawLine(transform.rotation * Vector3.right, transform.rotation * Vector3.right, Color.red, Mathf.Infinity);
+		if (Time.time - initTime >= duration)
+			gameObject.SetActive(false);
 	}
 
 	void OnTriggerEnter(Collider coll) {
@@ -22,5 +21,11 @@ public class Reflector : MonoBehaviour {
 
 			coll.GetComponent<Rigidbody>().velocity = vel;
 		}
+	}
+
+	public void initReflector()
+	{
+		gameObject.SetActive(true);
+		initTime = Time.time;
 	}
 }

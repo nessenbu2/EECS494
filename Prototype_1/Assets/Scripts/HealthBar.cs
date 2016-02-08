@@ -17,4 +17,14 @@ public class HealthBar : Bar {
     {
         return new Vector2(10, 10);
     }
+
+    protected override Color GetColor()
+    {
+        return Color.red;
+    }
+
+    protected override Color GetTextColor()
+    {
+        return Color.black;
+    }
 }

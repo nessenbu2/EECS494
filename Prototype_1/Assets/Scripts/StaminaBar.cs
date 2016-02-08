@@ -17,4 +17,14 @@ public class StaminaBar : Bar {
     {
         return new Vector2(10, 40);
     }
+
+    protected override Color GetColor()
+    {
+        return Color.yellow;
+    }
+
+    protected override Color GetTextColor()
+    {
+        return Color.black;
+    }
 }

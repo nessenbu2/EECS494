@@ -41,6 +41,7 @@ public class Hero : MonoBehaviour {
     void Awake()
     {
         bulletLayer = LayerMask.NameToLayer("Bullet");
+		enemyLayer = LayerMask.NameToLayer("Enemy");
         hero = this;
         health = _maxHealth = 10;
 		stamina = _maxStamina = 100;
@@ -84,14 +85,6 @@ public class Hero : MonoBehaviour {
 		}
 	}
 
-    void OnTriggerEnter(Collider col)
-    {
-        if (col.gameObject.layer == bulletLayer)
-        {
-			takeDamage(1);
-        }
-    }
-
     void OnCollisionEnter(Collision col)
     {
         if (col.gameObject.layer == enemyLayer)
@@ -100,7 +93,12 @@ public class Hero : MonoBehaviour {
         }
     }
 
-	private void takeDamage(int damage)
+//	(\(\
+//	(='.')
+//	( )  )
+//	(_)(_) /\/\/\
+
+	public void takeDamage(int damage)
 	{
 		health -= damage;
 		healthBar.Remove(damage);

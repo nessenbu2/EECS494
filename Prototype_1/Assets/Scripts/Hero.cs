@@ -119,6 +119,8 @@ public class Hero : MonoBehaviour {
     private void spawnReflector()
     {
 		reflector.initReflector();
+		stamina -= reflCost;
+		staminaBar.Remove(reflCost);
     }
 
     private void Move()

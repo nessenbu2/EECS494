@@ -20,8 +20,7 @@ public class Reflector : MonoBehaviour {
 
 			Vector3 vel;
 			if (Time.time - initTime <= specialRefl) {
-				vel = dir * coll.GetComponent<Rigidbody>().velocity.magnitude * 4;
-				print ("special");
+				vel = dir * coll.GetComponent<Rigidbody>().velocity.magnitude * 2;
 			} else {
 				vel = dir * coll.GetComponent<Rigidbody>().velocity.magnitude;
 			}

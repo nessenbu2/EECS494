@@ -18,8 +18,9 @@ public class Hero : MonoBehaviour {
     private float reflectorCooldown = 0.75f;
     private float lastRefl;
     private float spawnDist = 1f;
-	private int reflCost = 20;
+	private int reflCost = 10;
 
+	public bool reflOut = false;
 	private bool staminaFrame = true;
 	private float staminaTick;
 	private float staminaCooldown = 0.1f;
@@ -62,19 +63,30 @@ public class Hero : MonoBehaviour {
 
         FaceCursor();
 
-        if (Input.GetKey(KeyCode.Space) && Time.time - lastRefl > reflectorCooldown)
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Mouse0))
         {
-			if (stamina >= reflCost)
-				spawnReflector();
+			spawnReflector();
+			reflOut = true;
         }
-
+		else if (!Input.GetKey(KeyCode.Space) && !Input.GetKey(KeyCode.Mouse0))
+		{
+			reflector.gameObject.SetActive(false);
+			reflOut = false;
+		}
     }
 
 	void FixedUpdate()
 	{
-		if (Time.time - staminaTick < staminaCooldown)
+		if (stamina <= 0)
 		{
-			return;
+			reflOut = false;
+			reflector.gameObject.SetActive(false);
+		}
+
+		if (reflOut)
+		{
+			stamina -= 2;
+			staminaBar.Remove(2);
 		}
 
 		staminaTick = Time.time;
@@ -106,11 +118,7 @@ public class Hero : MonoBehaviour {
 
     private void spawnReflector()
     {
-        lastRefl = Time.time;
 		reflector.initReflector();
-
-		stamina -= 20;
-		staminaBar.Remove(20);
     }
 
     private void Move()

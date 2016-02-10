@@ -4,12 +4,12 @@ using System.Collections;
 public class Reflector : MonoBehaviour {
 
 	float initTime;
-	float duration = 0.5f;
+	float specialRefl = 0.1f; // Might wanna make it lower
 
 	// Update is called once per frame
 	void Update () {
-		if (Time.time - initTime >= duration)
-			gameObject.SetActive(false);
+		//if (Time.time - initTime >= duration)
+		//	gameObject.SetActive(false);
 	}
 
 	void OnTriggerEnter(Collider coll) {
@@ -17,7 +17,14 @@ public class Reflector : MonoBehaviour {
 		{
 			// Redirect velocity to hero's x direction, same magnitude as before
 			Vector3 dir = transform.rotation * Vector3.right;
-			Vector3 vel = dir * coll.GetComponent<Rigidbody>().velocity.magnitude;
+
+			Vector3 vel;
+			if (Time.time - initTime <= specialRefl) {
+				vel = dir * coll.GetComponent<Rigidbody>().velocity.magnitude * 4;
+				print ("special");
+			} else {
+				vel = dir * coll.GetComponent<Rigidbody>().velocity.magnitude;
+			}
 
 			coll.GetComponent<Rigidbody>().velocity = vel;
 		}
@@ -25,7 +32,7 @@ public class Reflector : MonoBehaviour {
 
 	public void initReflector()
 	{
-		gameObject.SetActive(true);
 		initTime = Time.time;
+		gameObject.SetActive(true);
 	}
 }

@@ -7,4 +7,9 @@ public class LoadOnClick : MonoBehaviour
     {
         Application.LoadLevel(scene);
     }
+
+    public void ReloadLevel()
+    {
+        Application.LoadLevel(Application.loadedLevel);
+    }
 }

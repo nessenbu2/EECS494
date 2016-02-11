@@ -116,6 +116,11 @@ public class Hero : MonoBehaviour {
 		healthBar.Remove(damage);
 	}
 
+    public bool Dead()
+    {
+        return health <= 0;
+    }
+
     private void spawnReflector()
     {
 		reflector.initReflector();

@@ -57,7 +57,8 @@ public class EnemyBase : MonoBehaviour
     // This is a non-virtual interface allowing easy fire control.
     void Update()
     {
-        fire();
+        if (poi != null)
+            fire();
         return;
     }
 
@@ -65,7 +66,8 @@ public class EnemyBase : MonoBehaviour
     // so this non-virtual interface allows easy movement control.
     void FixedUpdate()
     {
-        move();
+        if (poi != null)
+            move();
         return;
     }
 

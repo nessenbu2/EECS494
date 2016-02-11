@@ -10,6 +10,21 @@ public class BulletBase : MonoBehaviour
 
     [Header("BulletBase: Dynamically Set Fields")]
     public GameObject originEnemy;
+    public Rigidbody rigid;
+
+    void Start()
+    {
+        rigid = GetComponent<Rigidbody>();
+
+        onStart();
+        return;
+    }
+
+    void Update()
+    {
+        onUpdate();
+        return;
+    }
 
     // This will deal with the bullet hitting other entities.
     // It will not be able to damage the originating enemy.
@@ -24,6 +39,20 @@ public class BulletBase : MonoBehaviour
         }
         
         hitEntity(other);
+    }
+
+    // This virtual method allows for varying initializations.
+    // The default is to do nothing.
+    protected virtual void onStart()
+    {
+        return;
+    }
+
+    // This virtual method allows for varying onUpdate actions.
+    // The default is to do nothing.
+    protected virtual void onUpdate()
+    {
+        return;
     }
 
     void OnTriggerExit(Collider other)

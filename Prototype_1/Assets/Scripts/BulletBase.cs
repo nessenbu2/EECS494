@@ -8,14 +8,24 @@ public class BulletBase : MonoBehaviour
     public float bulletSpeed = 2.0f;
     public int bulletDamage = 1;
 
+    public Material enemyMat;
+    public Material reflectMat;
+
     [Header("BulletBase: Dynamically Set Fields")]
-    public GameObject originEnemy;
     public Rigidbody rigid;
+
+    public bool ignoreEnemies;
+
+    void Awake()
+    {
+        rigid = GetComponent<Rigidbody>();
+        ignoreEnemies = true;
+
+        return;
+    }
 
     void Start()
     {
-        rigid = GetComponent<Rigidbody>();
-
         onStart();
         return;
     }
@@ -32,13 +42,28 @@ public class BulletBase : MonoBehaviour
     // are allowed to have different properties (e.g. bouncing off walls).
     void OnTriggerEnter(Collider other)
     {
-        // This should probably be done with a tag, but this works for now.
-        if (other.gameObject == originEnemy)
+        // Don't damage on reflection
+        if (other.gameObject.tag == "Reflector")
+        {
+            ignoreEnemies = false;
+            return;
+        }
+
+        if (LayerMask.NameToLayer("Hero") == other.gameObject.layer)
+        {
+            Hero.hero.takeDamage(1);
+            Destroy(gameObject);
+
+            return;
+        }
+
+        if (LayerMask.NameToLayer("Bullet") == other.gameObject.layer)
         {
             return;
         }
-        
+
         hitEntity(other);
+        return;
     }
 
     // This virtual method allows for varying initializations.
@@ -53,11 +78,6 @@ public class BulletBase : MonoBehaviour
     protected virtual void onUpdate()
     {
         return;
-    }
-
-    void OnTriggerExit(Collider other)
-    {
-        originEnemy = null;
     }
 
     // This virtual method allows different bullets to be made

@@ -3,7 +3,6 @@
 public class EnemyBase : MonoBehaviour
 {
     [Header("EnemyBase: Inspector Set General Fields")]
-    public GameObject poi;
     public int health = 1;
 
     [Header("EnemyBase: Inspector Set General Firing Fields")]
@@ -21,6 +20,7 @@ public class EnemyBase : MonoBehaviour
     public float aggroReflectTime = 1.0f;
 
     [Header("EnemyBase: Dynamically Set General Fields")]
+    public GameObject poi;
     public Rigidbody rigid;
     public EnemySpawner enemySpawn;
 
@@ -49,7 +49,7 @@ public class EnemyBase : MonoBehaviour
 
     void Start()
     {
-        poi = GameObject.Find("Hero");
+        poi = Hero.hero.gameObject;
     }
 
     // Update will keep shooting as fluid as possible
@@ -89,7 +89,7 @@ public class EnemyBase : MonoBehaviour
     {
         // We are likely to change self-damage rules for enemy bullets.
         BulletBase bullet = other.gameObject.GetComponent<BulletBase>();
-        if ((bullet != null) && (bullet.originEnemy != gameObject))
+        if ((bullet != null) && !bullet.ignoreEnemies)
         {
             health -= bullet.bulletDamage;
             if (health <= 0)
@@ -217,17 +217,41 @@ public class EnemyBase : MonoBehaviour
         elapsedFireTime = 0f;
 
         GameObject goBullet = Instantiate(bullet);
-        Rigidbody bulletRigid = goBullet.GetComponent<Rigidbody>();
         BulletBase bulletBase = goBullet.GetComponent<BulletBase>();
 
         goBullet.transform.position = transform.position;
-        bulletBase.originEnemy = gameObject;
 
-        Vector3 vel = bulletRigid.velocity;
-        vel = poi.transform.position - transform.position;
+        Vector3 vel = poi.transform.position - transform.position;
         vel.Normalize();
         vel *= bulletBase.bulletSpeed;
-        bulletRigid.velocity = vel;
+        bulletBase.rigid.velocity = vel;
+
+        return;
+    }
+
+    protected void randomShot()
+    {
+        if (elapsedFireTime < timeBetweenBulletShots)
+        {
+            return;
+        }
+        elapsedFireTime = 0f;
+
+        GameObject goBullet = Instantiate(bullet);
+        BulletBase bulletBase = goBullet.GetComponent<BulletBase>();
+
+        goBullet.transform.position = transform.position;
+
+        Vector3 vel = Vector3.zero;
+        do
+        {
+            vel.x = Random.value - 0.5f;
+            vel.y = Random.value - 0.5f;
+            vel.z = 0f;
+        } while (vel == Vector3.zero);
+
+        vel.Normalize();
+        bulletBase.rigid.velocity = vel * bulletBase.bulletSpeed;
 
         return;
     }

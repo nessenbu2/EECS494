@@ -24,21 +24,8 @@ public class BouncingBullet : BulletBase
     // hitting anything else destroys it.
     protected override void hitEntity(Collider other)
     {
-        // Don't damage on reflection
-        if (other.gameObject.tag == "Reflector")
-        {
-            return;
-        }
-
-        if (LayerMask.NameToLayer("Hero") == other.gameObject.layer)
-        {
-            Hero.hero.takeDamage(1);
-            Destroy(gameObject);
-
-            return;
-        }
-
-        if (LayerMask.NameToLayer("Enemy") == other.gameObject.layer)
+        if ((LayerMask.NameToLayer("Enemy") == other.gameObject.layer) &&
+            !ignoreEnemies)
         {
             Destroy(gameObject);
             return;

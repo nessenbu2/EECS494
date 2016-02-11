@@ -27,9 +27,9 @@ public class BulletBase : MonoBehaviour
     }
 
     void OnTriggerExit(Collider other)
-	{
-		originEnemy = null;
-	}
+    {
+        originEnemy = null;
+    }
 
     // This virtual method allows different bullets to be made
     // that deal different with hitting another entity.

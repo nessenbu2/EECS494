@@ -22,7 +22,7 @@ public class EnemyBase : MonoBehaviour
 
     [Header("EnemyBase: Dynamically Set General Fields")]
     public Rigidbody rigid;
-	public EnemySpawner enemySpawn;
+    public EnemySpawner enemySpawn;
 
     [Header("EnemyBase: Dynamically Set General Firing Fields")]
     public float elapsedFireTime;
@@ -30,7 +30,7 @@ public class EnemyBase : MonoBehaviour
     [Header("EnemyBase: Dynamically Set General Movement Fields")]
     public Vector3 currentForce;
     public float elapsedForceShiftTime;
-    public Collision currentCollision;
+    public Vector3? collisionForce; // The ? makes this nullable.
 
     // Initialize all needed starting values.
     void Awake()
@@ -42,15 +42,15 @@ public class EnemyBase : MonoBehaviour
         // i.e. give it an initial random force.
         elapsedForceShiftTime = timeBetweenForceShift;
         elapsedFireTime = timeBetweenBulletShots;
-        currentCollision = null;
+        collisionForce = null;
 
         return;
     }
 
-	void Start()
-	{
-		poi = GameObject.Find("Hero");
-	}
+    void Start()
+    {
+        poi = GameObject.Find("Hero");
+    }
 
     // Update will keep shooting as fluid as possible
     // keeping within a set timer.
@@ -73,7 +73,12 @@ public class EnemyBase : MonoBehaviour
     // by the current movement function.
     void OnCollisionEnter(Collision collision)
     {
-        currentCollision = collision;
+        Vector3 tempForce = Vector3.Reflect(
+            currentForce, collision.contacts[0].normal);
+
+        tempForce.Normalize();
+        collisionForce = tempForce * maxSpeed;
+
         return;
     }
 
@@ -89,7 +94,12 @@ public class EnemyBase : MonoBehaviour
             health -= bullet.bulletDamage;
             if (health <= 0)
             {
+                if (enemySpawn != null)
+                {
+                    enemySpawn.enemy = null;
+                }
                 onDeath();
+
                 Destroy(gameObject);
             }
         }
@@ -125,19 +135,15 @@ public class EnemyBase : MonoBehaviour
     // This is assumed to only ever be called through FixedUpdate().
     protected void wanderMovement()
     {
-        if (currentCollision != null)
+        if (collisionForce != null)
         {
-            currentForce = Vector3.Reflect(
-                currentForce, currentCollision.contacts[0].normal);
-
-            currentForce.Normalize();
-            currentForce *= maxSpeed;
-
-            currentCollision = null;
+            currentForce = collisionForce.Value;
+            collisionForce = null;
             elapsedForceShiftTime = 0f;
 
             rigid.velocity = (1 - newForceWeight) * rigid.velocity +
                 newForceWeight * currentForce;
+
             return;
         }
 
@@ -175,19 +181,15 @@ public class EnemyBase : MonoBehaviour
 
         if (elapsedForceShiftTime >= aggroReflectTime)
         {
-            if (currentCollision != null)
+            if (collisionForce != null)
             {
-                currentForce = Vector3.Reflect(
-                currentForce, currentCollision.contacts[0].normal);
-
-                currentForce.Normalize();
-                currentForce *= maxSpeed;
-
-                currentCollision = null;
+                currentForce = collisionForce.Value;
+                collisionForce = null;
                 elapsedForceShiftTime = 0f;
 
                 rigid.velocity = (1 - newForceWeight) * rigid.velocity +
                     newForceWeight * currentForce;
+
                 return;
             }
 

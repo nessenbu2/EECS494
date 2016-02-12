@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 
-// This enemy name is likely to change, but it is mostly a testbed enemy.
 public class BasicEnemy : EnemyBase
 {
     [Header("BasicEnemy: Inspector Set Firing Fields")]
@@ -14,8 +13,6 @@ public class BasicEnemy : EnemyBase
     // at the poi when within a certain radius.
     protected override void fire()
     {
-        elapsedFireTime += Time.deltaTime;
-
         if (Vector3.Magnitude(poi.transform.position - transform.position) <=
             fireRadius)
         {
@@ -41,9 +38,4 @@ public class BasicEnemy : EnemyBase
         }
         return;
     }
-
-	protected override void onDeath()
-	{
-		enemySpawn.enemy = null;
-	}
 }

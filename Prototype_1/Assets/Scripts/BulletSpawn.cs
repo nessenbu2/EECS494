@@ -17,7 +17,7 @@ public class BulletSpawn : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		Vector3 targetDir = (transform.position - target.transform.position).normalized;
+		// Vector3 targetDir = (transform.position - target.transform.position).normalized;
 		spawn();
 	}
 

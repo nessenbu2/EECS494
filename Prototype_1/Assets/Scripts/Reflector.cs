@@ -6,6 +6,13 @@ public class Reflector : MonoBehaviour {
 	float initTime;
 	float specialRefl = 0.1f; // Might wanna make it lower
 
+	public IReflector reflStrategy;
+
+	void Awake()
+	{
+		reflStrategy = new DefaultReflector();
+	}
+
 	// Update is called once per frame
 	void Update () {
 		//if (Time.time - initTime >= duration)
@@ -13,6 +20,7 @@ public class Reflector : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider coll) {
+		reflStrategy.Reflect(coll, initTime);
 		if (coll.attachedRigidbody)
 		{
 			// Redirect velocity to hero's x direction, same magnitude as before

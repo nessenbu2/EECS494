@@ -2,20 +2,25 @@
 using System.Collections;
 
 public class MainCamera : MonoBehaviour {
-    public GameObject hero;
-	// Use this for initialization
-	void Start () {
+
+    public GameObject hero, deathMenu;
 	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-        Vector3 temp = Vector3.zero;
-        temp.x = hero.transform.position.x;
-        temp.y = hero.transform.position.y;
-        temp.z = -20;
-        transform.position = temp;
-        
-        //pos.y
+	void Update ()
+    {
+        if (Hero.hero != null && Hero.hero.Dead())
+        {
+            Destroy(hero);
+            Instantiate(deathMenu);
+        }
+        else if (hero != null)
+        {
+            Vector3 temp = Vector3.zero;
+            temp.x = hero.transform.position.x;
+            temp.y = hero.transform.position.y;
+            temp.z = -20;
+            transform.position = temp;
+            
+            //pos.y
+        }
 	}
 }

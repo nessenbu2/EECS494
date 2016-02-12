@@ -4,6 +4,7 @@ public class EnemyBase : MonoBehaviour
 {
     [Header("EnemyBase: Inspector Set General Fields")]
     public int health = 1;
+    public float invulnTime = 1.0f;
 
     [Header("EnemyBase: Inspector Set General Firing Fields")]
     public GameObject bullet;
@@ -23,6 +24,8 @@ public class EnemyBase : MonoBehaviour
     public GameObject poi;
     public Rigidbody rigid;
     public EnemySpawner enemySpawn;
+    public bool isInvuln;
+    public float invulnStartTime;
 
     [Header("EnemyBase: Dynamically Set General Firing Fields")]
     public float elapsedFireTime;
@@ -44,6 +47,8 @@ public class EnemyBase : MonoBehaviour
         elapsedFireTime = timeBetweenBulletShots;
         collisionForce = null;
 
+        isInvuln = false;
+
         return;
     }
 
@@ -57,6 +62,17 @@ public class EnemyBase : MonoBehaviour
     // This is a non-virtual interface allowing easy fire control.
     void Update()
     {
+        if (isInvuln && ((invulnStartTime + invulnTime) <= Time.time))
+        {
+            isInvuln = false;
+        }
+
+        elapsedFireTime += Time.deltaTime;
+        if (elapsedFireTime < timeBetweenBulletShots)
+        {
+            return;
+        }
+
         fire();
         return;
     }
@@ -91,6 +107,13 @@ public class EnemyBase : MonoBehaviour
         BulletBase bullet = other.gameObject.GetComponent<BulletBase>();
         if ((bullet != null) && !bullet.ignoreEnemies)
         {
+            if (isInvuln)
+            {
+                return;
+            }
+            isInvuln = true;
+            invulnStartTime = Time.time;
+
             health -= bullet.bulletDamage;
             if (health <= 0)
             {
@@ -207,13 +230,8 @@ public class EnemyBase : MonoBehaviour
 
     // This function performs a standard direct shot at the poi.
     // The enemy shoots directly at the poi.
-    // This is assumed to only ever be called through Update().
     protected void standardDirectShot()
     {
-        if (elapsedFireTime < timeBetweenBulletShots)
-        {
-            return;
-        }
         elapsedFireTime = 0f;
 
         GameObject goBullet = Instantiate(bullet);
@@ -229,12 +247,9 @@ public class EnemyBase : MonoBehaviour
         return;
     }
 
+    // This functions shoots bullets in random directions.
     protected void randomShot()
     {
-        if (elapsedFireTime < timeBetweenBulletShots)
-        {
-            return;
-        }
         elapsedFireTime = 0f;
 
         GameObject goBullet = Instantiate(bullet);
@@ -252,6 +267,92 @@ public class EnemyBase : MonoBehaviour
 
         vel.Normalize();
         bulletBase.rigid.velocity = vel * bulletBase.bulletSpeed;
+
+        return;
+    }
+
+    // This function shoots 3 bullets in an arc directed at the poi.
+    // The "tightness" of the arc is defined by forwardWeight.
+    protected void directTripleShot(float forwardWeight)
+    {
+        elapsedFireTime = 0f;
+
+        GameObject centerBullet = Instantiate(bullet);
+        GameObject leftBullet = Instantiate(bullet);
+        GameObject rightBullet = Instantiate(bullet);
+
+        BulletBase centerBase = centerBullet.GetComponent<BulletBase>();
+        BulletBase leftBase = leftBullet.GetComponent<BulletBase>();
+        BulletBase rightBase = rightBullet.GetComponent<BulletBase>();
+
+        centerBullet.transform.position = transform.position;
+        leftBullet.transform.position = transform.position;
+        rightBullet.transform.position = transform.position;
+
+        Vector3 centerVel = poi.transform.position - transform.position;
+        centerVel.Normalize();
+        Vector3 leftVel = (centerVel * forwardWeight) +
+            Vector3.Cross(transform.forward, centerVel);
+        leftVel.Normalize();
+        Vector3 rightVel = (centerVel * forwardWeight) +
+            Vector3.Cross(centerVel, transform.forward);
+        rightVel.Normalize();
+
+        centerBase.rigid.velocity = centerVel * centerBase.bulletSpeed;
+        leftBase.rigid.velocity = leftVel * leftBase.bulletSpeed;
+        rightBase.rigid.velocity = rightVel * rightBase.bulletSpeed;
+
+        return;
+    }
+
+    // This function shoots 4 bullets in an arc directed at the poi.
+    // The "tightness" of the arc is defined by the xForwardWeight params.
+    // Usually, inner > outer (in order to keep it "inner").
+    protected void directQuadShot(
+        float innerForwardWeight, float outerForwardWeight)
+    {
+        elapsedFireTime = 0f;
+
+        GameObject outerLeftBullet = Instantiate(bullet);
+        GameObject innerLeftBullet = Instantiate(bullet);
+        GameObject innerRightBullet = Instantiate(bullet);
+        GameObject outerRightBullet = Instantiate(bullet);
+
+        BulletBase outerLeftBase = outerLeftBullet.GetComponent<BulletBase>();
+        BulletBase innerLeftBase = innerLeftBullet.GetComponent<BulletBase>();
+        BulletBase innerRightBase = innerRightBullet.GetComponent<BulletBase>();
+        BulletBase outerRightBase = outerRightBullet.GetComponent<BulletBase>();
+
+        outerLeftBullet.transform.position = transform.position;
+        innerLeftBullet.transform.position = transform.position;
+        innerRightBullet.transform.position = transform.position;
+        outerRightBullet.transform.position = transform.position;
+
+        Vector3 forward = poi.transform.position - transform.position;
+        forward.Normalize();
+
+        Vector3 outerLeftVel = (forward * outerForwardWeight) +
+            Vector3.Cross(transform.forward, forward);
+        Vector3 innerLeftVel = (forward * innerForwardWeight) +
+            Vector3.Cross(transform.forward, forward);
+        Vector3 innerRightVel = (forward * innerForwardWeight) +
+            Vector3.Cross(forward, transform.forward);
+        Vector3 outerRightVel = (forward * outerForwardWeight) +
+            Vector3.Cross(forward, transform.forward);
+
+        outerLeftVel.Normalize();
+        innerLeftVel.Normalize();
+        innerRightVel.Normalize();
+        outerRightVel.Normalize();
+
+        outerLeftBase.rigid.velocity =
+            outerLeftVel * outerLeftBase.bulletSpeed;
+        innerLeftBase.rigid.velocity =
+            innerLeftVel * innerLeftBase.bulletSpeed;
+        innerRightBase.rigid.velocity =
+            innerRightVel * innerRightBase.bulletSpeed;
+        outerRightBase.rigid.velocity =
+            outerRightVel * outerRightBase.bulletSpeed;
 
         return;
     }

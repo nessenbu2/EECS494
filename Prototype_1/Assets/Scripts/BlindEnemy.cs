@@ -6,9 +6,7 @@ public class BlindEnemy : EnemyBase
     // Here in BlindEnemy, this fires in a random direction.
     protected override void fire()
     {
-        elapsedFireTime += Time.deltaTime;
         randomShot();
-
         return;
     }
 

@@ -13,13 +13,17 @@ public class BulletBase : MonoBehaviour
 
     [Header("BulletBase: Dynamically Set Fields")]
     public Rigidbody rigid;
+    public MeshRenderer rend;
 
     public bool ignoreEnemies;
 
     void Awake()
     {
         rigid = GetComponent<Rigidbody>();
+        rend = GetComponent<MeshRenderer>();
+
         ignoreEnemies = true;
+        rend.material = enemyMat;
 
         return;
     }
@@ -45,7 +49,14 @@ public class BulletBase : MonoBehaviour
         // Don't damage on reflection
         if (other.gameObject.tag == "Reflector")
         {
+            rend.material = reflectMat;
             ignoreEnemies = false;
+            return;
+        }
+
+        if ((LayerMask.NameToLayer("Enemy") == other.gameObject.layer) &&
+            ignoreEnemies)
+        {
             return;
         }
 

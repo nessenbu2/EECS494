@@ -10,8 +10,6 @@ public class AggroOnlyEnemy : EnemyBase
     // at the poi when within a certain radius.
     protected override void fire()
     {
-        elapsedFireTime += Time.deltaTime;
-
         if (Vector3.Magnitude(poi.transform.position - transform.position) <=
             fireRadius)
         {

@@ -24,8 +24,7 @@ public class BouncingBullet : BulletBase
     // hitting anything else destroys it.
     protected override void hitEntity(Collider other)
     {
-        if ((LayerMask.NameToLayer("Enemy") == other.gameObject.layer) &&
-            !ignoreEnemies)
+        if (LayerMask.NameToLayer("Enemy") == other.gameObject.layer)
         {
             Destroy(gameObject);
             return;
@@ -42,7 +41,7 @@ public class BouncingBullet : BulletBase
 
         RaycastHit hit;
         Vector3 movedPos = transform.position - (vel * 0.5f);
-        Physics.Raycast(movedPos, vel, out hit, 2f);
+        Physics.Raycast(movedPos, vel, out hit, 1f);
 
         vel = Vector3.Reflect(vel, hit.normal);
         vel.Normalize();

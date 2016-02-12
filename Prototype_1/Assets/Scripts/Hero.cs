@@ -7,7 +7,7 @@ public class Hero : MonoBehaviour {
     public static Hero hero;
 
 
-    private float speed = 5f;
+    private float speed = 7.5f;
     private Rigidbody body;
     private HealthBar healthBar;
     private StaminaBar staminaBar;

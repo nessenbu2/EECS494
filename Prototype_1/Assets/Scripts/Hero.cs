@@ -12,47 +12,47 @@ public class Hero : MonoBehaviour {
     private HealthBar healthBar;
     private StaminaBar staminaBar;
     private int _maxHealth, health;
-	private int _maxStamina, stamina;
-	private int bulletLayer, enemyLayer;
+    private int _maxStamina, stamina;
+    private int /*bulletLayer,*/ enemyLayer;
 
-    private float reflectorCooldown = 0.75f;
+    //private float reflectorCooldown = 0.75f;
     private float lastRefl;
-    private float spawnDist = 1f;
-	private int reflCost = 10;
+    //private float spawnDist = 1f;
+    private int reflCost = 10;
 
-	public bool reflOut = false;
-	private bool staminaFrame = true;
-	private float staminaTick;
-	private float staminaCooldown = 0.1f;
+    public bool reflOut = false;
+    //private bool staminaFrame = true;
+    //private float staminaTick;
+    //private float staminaCooldown = 0.1f;
 
-	private Reflector reflector;
+    private Reflector reflector;
 
     private Camera cam;
 
     public int maxHealth
     {
-		get { return _maxHealth; }
+        get { return _maxHealth; }
     }
 
-	public int maxStamina
-	{
-		get { return _maxStamina; }
-	}
+    public int maxStamina
+    {
+        get { return _maxStamina; }
+    }
 
     void Awake()
     {
-        bulletLayer = LayerMask.NameToLayer("Bullet");
-		enemyLayer = LayerMask.NameToLayer("Enemy");
+        //bulletLayer = LayerMask.NameToLayer("Bullet");
+        enemyLayer = LayerMask.NameToLayer("Enemy");
         hero = this;
         health = _maxHealth = 10;
-		stamina = _maxStamina = 100;
-		reflector = transform.Find("Reflector").GetComponent<Reflector>();
+        stamina = _maxStamina = 100;
+        reflector = transform.Find("Reflector").GetComponent<Reflector>();
     }
 
     void Start()
     {
         healthBar = FindObjectOfType<HealthBar>();
-		staminaBar = FindObjectOfType<StaminaBar>();
+        staminaBar = FindObjectOfType<StaminaBar>();
         cam = FindObjectOfType<Camera>();
         body = GetComponent<Rigidbody>();
     }
@@ -65,43 +65,43 @@ public class Hero : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Mouse0))
         {
-			spawnReflector();
-			reflOut = true;
+            spawnReflector();
+            reflOut = true;
         }
-		else if (!Input.GetKey(KeyCode.Space) && !Input.GetKey(KeyCode.Mouse0))
-		{
-			reflector.gameObject.SetActive(false);
-			reflOut = false;
-		}
+        else if (!Input.GetKey(KeyCode.Space) && !Input.GetKey(KeyCode.Mouse0))
+        {
+            reflector.gameObject.SetActive(false);
+            reflOut = false;
+        }
     }
 
-	void FixedUpdate()
-	{
-		if (stamina <= 0)
-		{
-			reflOut = false;
-			reflector.gameObject.SetActive(false);
-		}
+    void FixedUpdate()
+    {
+        if (stamina <= 0)
+        {
+            reflOut = false;
+            reflector.gameObject.SetActive(false);
+        }
 
-		if (reflOut)
-		{
-			stamina -= 2;
-			staminaBar.Remove(2);
-		}
+        if (reflOut)
+        {
+            stamina -= 2;
+            staminaBar.Remove(2);
+        }
 
-		staminaTick = Time.time;
-		if (stamina < maxStamina)
-		{
-			stamina += 1;
-			staminaBar.Add(1);
-		}
-	}
+        //staminaTick = Time.time;
+        if (stamina < maxStamina)
+        {
+            stamina += 1;
+            staminaBar.Add(1);
+        }
+    }
 
     void OnCollisionEnter(Collision col)
     {
         if (col.gameObject.layer == enemyLayer)
         {
-			takeDamage(1);
+            takeDamage(1);
         }
     }
 
@@ -110,11 +110,11 @@ public class Hero : MonoBehaviour {
 //	( )  )
 //	(_)(_) /\/\/\
 
-	public void takeDamage(int damage)
-	{
-		health -= damage;
-		healthBar.Remove(damage);
-	}
+    public void takeDamage(int damage)
+    {
+        health -= damage;
+        healthBar.Remove(damage);
+    }
 
     public bool Dead()
     {
@@ -123,9 +123,9 @@ public class Hero : MonoBehaviour {
 
     private void spawnReflector()
     {
-		reflector.initReflector();
-		stamina -= reflCost;
-		staminaBar.Remove(reflCost);
+        reflector.initReflector();
+        stamina -= reflCost;
+        staminaBar.Remove(reflCost);
     }
 
     private void Move()
@@ -171,6 +171,6 @@ public class Hero : MonoBehaviour {
         Vector3 target = cam.ScreenToWorldPoint(temp);
         target.z = transform.position.z;
         transform.LookAt(target, transform.up);
-		transform.rotation *= Quaternion.Euler(new Vector3(0, -90, 0));
+        transform.rotation *= Quaternion.Euler(new Vector3(0, -90, 0));
     }
 }

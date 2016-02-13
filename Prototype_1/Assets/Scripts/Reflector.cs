@@ -17,7 +17,8 @@ public class Reflector : MonoBehaviour
 	void OnTriggerEnter(Collider coll) {
 		if (coll.gameObject.tag != "SpawnedBullet")
 		{
-			reflStrategy.Reflect(coll);
+			Vector3 reflDir = transform.rotation * Vector3.right;
+			reflStrategy.Reflect(coll, reflDir);
 		}
 	}
 

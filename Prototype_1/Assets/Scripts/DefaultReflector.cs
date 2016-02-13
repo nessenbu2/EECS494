@@ -5,18 +5,15 @@ public class DefaultReflector : IReflector
 {
 	public DefaultReflector() {}
 
-	public void Reflect(Collider coll)
+	public void Reflect(Collider coll, Vector3 reflDir)
 	{
 		if (coll.attachedRigidbody)
 		{
-			// Redirect velocity to hero's x direction, same magnitude as before
-			Vector3 dir = Hero.hero.transform.rotation * Vector3.right;
-
 			Vector3 vel;
 			// if (Time.time - initTime <= specialRefl) {
-			// 	vel = dir * coll.GetComponent<Rigidbody>().velocity.magnitude * 2;
+			// 	vel = reflDir * coll.GetComponent<Rigidbody>().velocity.magnitude * 2;
 			// } else {
-			 	vel = dir * coll.GetComponent<Rigidbody>().velocity.magnitude;
+			 	vel = reflDir * coll.GetComponent<Rigidbody>().velocity.magnitude;
 			// }
 
 			coll.GetComponent<Rigidbody>().velocity = vel;

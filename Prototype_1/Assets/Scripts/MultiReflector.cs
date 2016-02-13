@@ -10,9 +10,9 @@ public class MultiReflector : MonoBehaviour, IReflector {
 		bulletPrefab = _bulletPrefab;
 	}
 
-	public void Reflect(Collider coll)
+	public void Reflect(Collider coll, Vector3 reflDir)
 	{
-		if (coll.attachedRigidbody)
+		if (coll.attachedRigidbody && coll.gameObject.layer == LayerMask.NameToLayer("Bullet"))
 		{
 			GameObject refl1, refl2, refl3;
 			refl1 = Instantiate<GameObject>(bulletPrefab);
@@ -27,28 +27,19 @@ public class MultiReflector : MonoBehaviour, IReflector {
 			refl2.transform.position = coll.transform.position;
 			refl3.transform.position = coll.transform.position;
 
-			Vector3 dir1 = Hero.hero.transform.rotation * Vector3.right;
-			Vector3 dir2 = Hero.hero.transform.rotation * Vector3.up;
-			Vector3 dir3 = Hero.hero.transform.rotation * -Vector3.up;
+			Vector3 dir1 = reflDir;
+			Vector3 dir2 = Quaternion.Euler(0,0,-30) * reflDir;
+			Vector3 dir3 = Quaternion.Euler(0,0,30) * reflDir;
 
 			Vector3 vel1;
 			Vector3 vel2;
 			Vector3 vel3;
-			//if (Time.time - initTime <= specialRefl) {
-			//	vel1 = dir1 * coll.GetComponent<Rigidbody>().velocity.magnitude;
-			//	vel2 = dir2 * coll.GetComponent<Rigidbody>().velocity.magnitude;
-			//	vel3 = dir3 * coll.GetComponent<Rigidbody>().velocity.magnitude;
-			//	refl1.GetComponent<Rigidbody>().velocity = vel1;
-			//	refl2.GetComponent<Rigidbody>().velocity = vel2;
-			//	refl3.GetComponent<Rigidbody>().velocity = vel3;
-			//} else {
-				vel1 = dir1 * coll.GetComponent<Rigidbody>().velocity.magnitude;
-				refl1.GetComponent<Rigidbody>().velocity = vel1;
-				vel2 = dir2 * coll.GetComponent<Rigidbody>().velocity.magnitude;
-				refl2.GetComponent<Rigidbody>().velocity = vel1;
-				vel3 = dir3 * coll.GetComponent<Rigidbody>().velocity.magnitude;
-				refl3.GetComponent<Rigidbody>().velocity = vel1;
-			//}
+			vel1 = dir1 * coll.GetComponent<Rigidbody>().velocity.magnitude;
+			refl1.GetComponent<Rigidbody>().velocity = vel1;
+			vel2 = dir2 * coll.GetComponent<Rigidbody>().velocity.magnitude;
+			refl2.GetComponent<Rigidbody>().velocity = vel2;
+			vel3 = dir3 * coll.GetComponent<Rigidbody>().velocity.magnitude;
+			refl3.GetComponent<Rigidbody>().velocity = vel3;
 
 			Destroy(coll.gameObject);
 		}

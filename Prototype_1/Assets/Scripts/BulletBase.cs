@@ -77,6 +77,7 @@ public class BulletBase : MonoBehaviour
         return;
     }
 
+
     // This virtual method allows for varying initializations.
     // The default is to do nothing.
     protected virtual void onStart()

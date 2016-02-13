@@ -35,6 +35,13 @@ public class EnemyBase : MonoBehaviour
     public float elapsedForceShiftTime;
     public Vector3? collisionForce; // The ? makes this nullable.
 
+    private static int numEnemies = 0;
+
+    public static int NumEnemies()
+    {
+        return numEnemies;
+    }
+
     // Initialize all needed starting values.
     void Awake()
     {
@@ -54,6 +61,7 @@ public class EnemyBase : MonoBehaviour
 
     void Start()
     {
+        numEnemies++;
         poi = Hero.hero.gameObject;
     }
 
@@ -134,6 +142,11 @@ public class EnemyBase : MonoBehaviour
         }
 
         return;
+    }
+
+    void OnDestroy()
+    {
+        numEnemies--;
     }
 
     // This virtual function fires this enemy's weapon.

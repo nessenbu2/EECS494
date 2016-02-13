@@ -97,6 +97,12 @@ public class Hero : MonoBehaviour {
         }
     }
 
+    void OnDestroy()
+    {
+        staminaBar.Remove(stamina);
+        stamina = 0;
+    }
+
     void OnCollisionEnter(Collision col)
     {
         if (col.gameObject.layer == enemyLayer)

@@ -9,4 +9,9 @@ public class CollectibleMulti : CollectibleBase
 	{
 		reflStrategy = new MultiReflector(bulletPrefab);
 	}
+
+	override protected void applyEffect()
+	{
+		Hero.hero.transform.Find("Reflector").GetComponent<Reflector>().reflStrategy = reflStrategy;
+	}
 }

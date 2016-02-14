@@ -134,6 +134,12 @@ public class Hero : MonoBehaviour {
         healthBar.Remove(damage);
     }
 
+	public void addHealth(int amount)
+	{
+		health = Mathf.Min(health + amount, maxHealth);
+		healthBar.Add(amount);
+	}
+
     public bool Dead()
     {
         return health <= 0;

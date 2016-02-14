@@ -63,6 +63,8 @@ public class EnemyBase : MonoBehaviour
 
     void Start()
     {
+        onStart();
+
         poi = Hero.hero.gameObject;
         return;
     }
@@ -161,6 +163,11 @@ public class EnemyBase : MonoBehaviour
         numEnemies--;
     }
 
+    protected virtual void onStart()
+    {
+        return;
+    }
+
     // This virtual function fires this enemy's weapon.
     // The base behavior is nothing, it must be overriden
     // if an enemy is too shoot.
@@ -189,6 +196,13 @@ public class EnemyBase : MonoBehaviour
     // This is assumed to only ever be called through FixedUpdate().
     protected void wanderMovement()
     {
+        if (rigid.velocity.magnitude > maxSpeed)
+        {
+            Vector3 vel = rigid.velocity;
+            vel.Normalize();
+            rigid.velocity = vel * maxSpeed;
+        }
+
         if (collisionForce != null)
         {
             currentForce = collisionForce.Value;
@@ -231,6 +245,13 @@ public class EnemyBase : MonoBehaviour
     // This is assumed to only ever be called through FixedUpdate().
     protected void aggroMovement()
     {
+        if (rigid.velocity.magnitude > maxSpeed)
+        {
+            Vector3 vel = rigid.velocity;
+            vel.Normalize();
+            rigid.velocity = vel * maxSpeed;
+        }
+
         elapsedForceShiftTime += Time.fixedDeltaTime;
 
         if (elapsedForceShiftTime >= aggroReflectTime)
@@ -414,6 +435,29 @@ public class EnemyBase : MonoBehaviour
             innerRightVel * innerRightBase.bulletSpeed;
         outerRightBase.rigid.velocity =
             outerRightVel * outerRightBase.bulletSpeed;
+
+        return;
+    }
+
+    // This function "shoots" an enemy.
+    // This is intended to be used by the Queen.
+    protected void spawnEnemy(List<GameObject> spawnPrefabs)
+    {
+        elapsedFireTime = 0f;
+        
+        if (spawnPrefabs.Count == 0)
+        {
+            return;
+        }
+
+        GameObject prefab = spawnPrefabs[Random.Range(0, spawnPrefabs.Count)];
+        if (prefab == null)
+        {
+            return;
+        }
+
+        GameObject enemy = Instantiate(prefab);
+        enemy.transform.position = transform.position;
 
         return;
     }

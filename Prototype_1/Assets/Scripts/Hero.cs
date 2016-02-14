@@ -5,7 +5,7 @@ public class Hero : MonoBehaviour {
 
     public GameObject reflectorPrefab;
     public static Hero hero;
-
+    public float invulnTime = 0.5f;
 
     private float speed = 7.5f;
     private Rigidbody body;
@@ -14,9 +14,11 @@ public class Hero : MonoBehaviour {
     private int _maxHealth, health;
     private int _maxStamina, stamina;
     private int /*bulletLayer,*/ enemyLayer;
+    private bool invulnerable = false;
 
     //private float reflectorCooldown = 0.75f;
     private float lastRefl;
+    private float lastDamage;
     //private float spawnDist = 1f;
     private int reflCost = 10;
 
@@ -59,6 +61,11 @@ public class Hero : MonoBehaviour {
     
     void Update()
     {
+        if (lastDamage + invulnTime < Time.time)
+        {
+            invulnerable = false;    
+        }
+
         Move();
 
         FaceCursor();
@@ -118,6 +125,11 @@ public class Hero : MonoBehaviour {
 
     public void takeDamage(int damage)
     {
+        if (invulnerable)
+            return;
+
+        invulnerable = true;
+        lastDamage = Time.time;
         health -= damage;
         healthBar.Remove(damage);
     }

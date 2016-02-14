@@ -11,9 +11,8 @@ public class Reflector : MonoBehaviour
 
 	void Awake()
 	{
-		// reflStrategy = new DefaultReflector();
+		reflStrategy = new DefaultReflector();
 		defaultRefl = new DefaultReflector();
-		reflStrategy = new MultiReflector(bulletPrefab);
 	}
 
 	void OnTriggerEnter(Collider coll) {

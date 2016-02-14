@@ -6,7 +6,7 @@ public class BlindEnemy : EnemyBase
     public float minForwardWeight = 0.5f;
 
     // This virtual function fires this enemy's weapon.
-    // Here in BlindEnemy, this fires in a random direction aimed at the poi.
+    // Here in BlindEnemy, this fires in a random direction.
     protected override void fire()
     {
         directedRandomShot(minForwardWeight);

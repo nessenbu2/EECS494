@@ -9,8 +9,15 @@ public class CollectibleBase : MonoBehaviour {
 	{
 		if (coll.gameObject.layer == LayerMask.NameToLayer("Hero"))
 		{
-			Hero.hero.transform.Find("Reflector").GetComponent<Reflector>().reflStrategy = reflStrategy;
+			applyEffect();
 			Destroy(gameObject);
 		}
 	}
+
+	void Update()
+	{
+		transform.Rotate(0,0,50 * Time.deltaTime);
+	}
+
+	virtual protected void applyEffect() {}
 }

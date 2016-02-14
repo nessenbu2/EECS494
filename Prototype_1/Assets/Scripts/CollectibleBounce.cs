@@ -8,4 +8,9 @@ public class CollectibleBounce : CollectibleBase {
 	void Start () {
 		reflStrategy = new BounceReflector(bulletPrefab);
 	}
+
+	override protected void applyEffect()
+	{
+		Hero.hero.transform.Find("Reflector").GetComponent<Reflector>().reflStrategy = reflStrategy;
+	}
 }

@@ -35,6 +35,9 @@ public class EnemyBase : MonoBehaviour
     public float elapsedForceShiftTime;
     public Vector3? collisionForce; // The ? makes this nullable.
 
+    [Header("EnemyBase: Particles Field")]
+    public ParticleSystem DeathParticles;
+
     public static int numEnemies = 0; // I need to access in EnemySpawner.
 
     public static int NumEnemies()
@@ -146,6 +149,10 @@ public class EnemyBase : MonoBehaviour
 
     void OnDestroy()
     {
+        ParticleSystem part = Instantiate(DeathParticles);
+        part.transform.position = transform.position;
+        part.Play();
+        Destroy(part, 5);
         numEnemies--;
     }
 

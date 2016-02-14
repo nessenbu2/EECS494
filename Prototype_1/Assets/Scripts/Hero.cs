@@ -5,7 +5,7 @@ public class Hero : MonoBehaviour {
 
     public GameObject reflectorPrefab;
     public static Hero hero;
-
+    public ParticleSystem DeathParticles;
 
     private float speed = 7.5f;
     private Rigidbody body;
@@ -101,6 +101,10 @@ public class Hero : MonoBehaviour {
     {
         staminaBar.Remove(stamina);
         stamina = 0;
+        ParticleSystem part = Instantiate(DeathParticles);
+        part.transform.position = transform.position;
+        part.Play();
+        Destroy(part, 20);
     }
 
     void OnCollisionEnter(Collision col)

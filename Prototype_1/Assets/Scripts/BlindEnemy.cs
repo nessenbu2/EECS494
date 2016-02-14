@@ -2,11 +2,14 @@
 
 public class BlindEnemy : EnemyBase
 {
+    [Header("EnemyBase: Inspector Set General Fields")]
+    public float minForwardWeight = 0.5f;
+
     // This virtual function fires this enemy's weapon.
     // Here in BlindEnemy, this fires in a random direction.
     protected override void fire()
     {
-        randomShot();
+        directedRandomShot(minForwardWeight);
         return;
     }
 

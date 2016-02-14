@@ -41,7 +41,7 @@ public class BouncingBullet : BulletBase
 
         RaycastHit hit;
         Vector3 movedPos = transform.position - (vel * 0.5f);
-        Physics.Raycast(movedPos, vel, out hit, 1f);
+        Physics.Raycast(movedPos, vel, out hit, 0.5f);
 
         vel = Vector3.Reflect(vel, hit.normal);
         vel.Normalize();

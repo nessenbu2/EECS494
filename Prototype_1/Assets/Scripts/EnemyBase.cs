@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 public class EnemyBase : MonoBehaviour
 {
@@ -23,7 +24,6 @@ public class EnemyBase : MonoBehaviour
     [Header("EnemyBase: Dynamically Set General Fields")]
     public GameObject poi;
     public Rigidbody rigid;
-    public EnemySpawner enemySpawn;
     public bool isInvuln;
     public float invulnStartTime;
 
@@ -34,6 +34,13 @@ public class EnemyBase : MonoBehaviour
     public Vector3 currentForce;
     public float elapsedForceShiftTime;
     public Vector3? collisionForce; // The ? makes this nullable.
+
+    public static int numEnemies = 0; // I need to access in EnemySpawner.
+
+    public static int NumEnemies()
+    {
+        return numEnemies;
+    }
 
     // Initialize all needed starting values.
     void Awake()
@@ -48,6 +55,7 @@ public class EnemyBase : MonoBehaviour
         collisionForce = null;
 
         isInvuln = false;
+        numEnemies++;
 
         return;
     }
@@ -55,6 +63,7 @@ public class EnemyBase : MonoBehaviour
     void Start()
     {
         poi = Hero.hero.gameObject;
+        return;
     }
 
     // Update will keep shooting as fluid as possible
@@ -62,8 +71,10 @@ public class EnemyBase : MonoBehaviour
     // This is a non-virtual interface allowing easy fire control.
     void Update()
     {
-		if (poi == null)
-			return;
+        if (poi == null)
+        {
+            return;
+        }
 
         if (isInvuln && ((invulnStartTime + invulnTime) <= Time.time))
         {
@@ -84,8 +95,10 @@ public class EnemyBase : MonoBehaviour
     // so this non-virtual interface allows easy movement control.
     void FixedUpdate()
     {
-		if (poi == null)
-			return;
+        if (poi == null)
+        {
+            return;
+        }
 
         move();
         return;
@@ -123,17 +136,17 @@ public class EnemyBase : MonoBehaviour
             health -= bullet.bulletDamage;
             if (health <= 0)
             {
-                if (enemySpawn != null)
-                {
-                    enemySpawn.enemy = null;
-                }
                 onDeath();
-
                 Destroy(gameObject);
             }
         }
 
         return;
+    }
+
+    void OnDestroy()
+    {
+        numEnemies--;
     }
 
     // This virtual function fires this enemy's weapon.
@@ -271,6 +284,36 @@ public class EnemyBase : MonoBehaviour
             vel.z = 0f;
         } while (vel == Vector3.zero);
 
+        vel.Normalize();
+        bulletBase.rigid.velocity = vel * bulletBase.bulletSpeed;
+
+        return;
+    }
+
+    protected void directedRandomShot(float minForwardWeight)
+    {
+        elapsedFireTime = 0f;
+
+        GameObject goBullet = Instantiate(bullet);
+        BulletBase bulletBase = goBullet.GetComponent<BulletBase>();
+
+        goBullet.transform.position = transform.position;
+
+        Vector3 vel = poi.transform.position - transform.position;
+        vel.Normalize();
+
+        Vector3 angle = Vector3.zero;
+        if (Random.Range(0, 2) == 1)
+        {
+            angle = Vector3.Cross(vel, transform.forward);
+        }
+        else
+        {
+            angle = Vector3.Cross(transform.forward, vel);
+        }
+
+        float forwardWeight = Random.Range(minForwardWeight, 1f);
+        vel = (forwardWeight * vel) + ((1 - forwardWeight) * angle);
         vel.Normalize();
         bulletBase.rigid.velocity = vel * bulletBase.bulletSpeed;
 

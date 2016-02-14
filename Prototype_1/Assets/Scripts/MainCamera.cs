@@ -3,8 +3,10 @@ using System.Collections;
 
 public class MainCamera : MonoBehaviour {
 
-    public GameObject hero, deathMenu;
-	
+    public GameObject hero, deathMenu, victoryMenu;
+
+    private bool spawned = false;
+
 	void Update ()
     {
         if (Hero.hero != null && Hero.hero.Dead())
@@ -21,6 +23,12 @@ public class MainCamera : MonoBehaviour {
             transform.position = temp;
             
             //pos.y
+        }
+
+        if (!spawned && EnemyBase.NumEnemies() == 0)
+        {
+            spawned = true;
+            Instantiate(victoryMenu);
         }
 	}
 }

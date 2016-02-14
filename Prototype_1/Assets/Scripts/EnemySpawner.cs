@@ -1,18 +1,45 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
-public class EnemySpawner : MonoBehaviour {
+public class EnemySpawner : MonoBehaviour
+{
+    [Header("EnemyBase: Inspector Set General Fields")]
+    public List<GameObject> spawnPrefabs;
+    public float spawnDelay = 4f;
+    public int numberOfSpawns = 1;
 
-	public GameObject enemyPrefab;
-	public GameObject enemy;
+    [Header("EnemyBase: Dynamically Set General Fields")]
+    public float delayElapsedTime;
 
-	// Update is called once per frame
-	void Update () {
-		if (enemy)
-			return;
+    void Awake()
+    {
+        ++EnemyBase.numEnemies;
 
-		enemy = Instantiate<GameObject>(enemyPrefab);
-		enemy.transform.position = transform.position;
-		enemy.GetComponent<EnemyBase>().enemySpawn = this;
-	}
+        delayElapsedTime = 0f;
+        return;
+    }
+
+    void Update()
+    {
+        if (numberOfSpawns <= 0)
+        {
+            --EnemyBase.numEnemies;
+
+            Destroy(gameObject);
+            return;
+        }
+
+        delayElapsedTime += Time.deltaTime;
+        if (delayElapsedTime >= spawnDelay)
+        {
+            delayElapsedTime = 0f;
+            --numberOfSpawns;
+
+            GameObject go =
+                Instantiate(spawnPrefabs[Random.Range(0, spawnPrefabs.Count)]);
+            go.transform.position = transform.position;
+        }
+
+        return;
+    }
 }

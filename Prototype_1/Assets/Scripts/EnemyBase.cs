@@ -6,6 +6,7 @@ public class EnemyBase : MonoBehaviour
     [Header("EnemyBase: Inspector Set General Fields")]
     public int health = 1;
     public float invulnTime = 1.0f;
+    public List<GameObject> powerupPrefabs;
 
     [Header("EnemyBase: Inspector Set General Firing Fields")]
     public GameObject bullet;
@@ -62,6 +63,8 @@ public class EnemyBase : MonoBehaviour
 
     void Start()
     {
+        onStart();
+
         poi = Hero.hero.gameObject;
         return;
     }
@@ -136,6 +139,17 @@ public class EnemyBase : MonoBehaviour
             health -= bullet.bulletDamage;
             if (health <= 0)
             {
+                if (powerupPrefabs.Count != 0)
+                {
+                    GameObject prefab =
+                        powerupPrefabs[Random.Range(0, powerupPrefabs.Count)];
+                    if (prefab != null)
+                    {
+                        GameObject powerup = Instantiate(prefab);
+                        powerup.transform.position = transform.position;
+                    }
+                }
+
                 onDeath();
                 Destroy(gameObject);
             }
@@ -147,6 +161,11 @@ public class EnemyBase : MonoBehaviour
     void OnDestroy()
     {
         numEnemies--;
+    }
+
+    protected virtual void onStart()
+    {
+        return;
     }
 
     // This virtual function fires this enemy's weapon.
@@ -177,6 +196,13 @@ public class EnemyBase : MonoBehaviour
     // This is assumed to only ever be called through FixedUpdate().
     protected void wanderMovement()
     {
+        if (rigid.velocity.magnitude > maxSpeed)
+        {
+            Vector3 vel = rigid.velocity;
+            vel.Normalize();
+            rigid.velocity = vel * maxSpeed;
+        }
+
         if (collisionForce != null)
         {
             currentForce = collisionForce.Value;
@@ -219,6 +245,13 @@ public class EnemyBase : MonoBehaviour
     // This is assumed to only ever be called through FixedUpdate().
     protected void aggroMovement()
     {
+        if (rigid.velocity.magnitude > maxSpeed)
+        {
+            Vector3 vel = rigid.velocity;
+            vel.Normalize();
+            rigid.velocity = vel * maxSpeed;
+        }
+
         elapsedForceShiftTime += Time.fixedDeltaTime;
 
         if (elapsedForceShiftTime >= aggroReflectTime)
@@ -402,6 +435,29 @@ public class EnemyBase : MonoBehaviour
             innerRightVel * innerRightBase.bulletSpeed;
         outerRightBase.rigid.velocity =
             outerRightVel * outerRightBase.bulletSpeed;
+
+        return;
+    }
+
+    // This function "shoots" an enemy.
+    // This is intended to be used by the Queen.
+    protected void spawnEnemy(List<GameObject> spawnPrefabs)
+    {
+        elapsedFireTime = 0f;
+        
+        if (spawnPrefabs.Count == 0)
+        {
+            return;
+        }
+
+        GameObject prefab = spawnPrefabs[Random.Range(0, spawnPrefabs.Count)];
+        if (prefab == null)
+        {
+            return;
+        }
+
+        GameObject enemy = Instantiate(prefab);
+        enemy.transform.position = transform.position;
 
         return;
     }

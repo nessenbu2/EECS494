@@ -15,8 +15,9 @@ public class Reflector : MonoBehaviour
 		defaultRefl = new DefaultReflector();
 	}
 
-	void OnTriggerEnter(Collider coll) {
+	virtual protected void OnTriggerEnter(Collider coll) {
 		Vector3 reflDir = transform.rotation * Vector3.right;
+		print (reflDir);
 		if (coll.gameObject.layer == LayerMask.NameToLayer("Enemy"))
 		{
 			defaultRefl.Reflect(coll, reflDir);

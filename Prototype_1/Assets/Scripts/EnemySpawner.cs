@@ -35,19 +35,8 @@ public class EnemySpawner : MonoBehaviour
             delayElapsedTime = 0f;
             --numberOfSpawns;
 
-            if (spawnPrefabs.Count == 0)
-            {
-                return;
-            }
-
-            GameObject prefab =
-                spawnPrefabs[Random.Range(0, spawnPrefabs.Count)];
-            if (prefab == null)
-            {
-                return;
-            }
-
-            GameObject go = Instantiate(prefab);
+            GameObject go =
+                Instantiate(spawnPrefabs[Random.Range(0, spawnPrefabs.Count)]);
             go.transform.position = transform.position;
         }
 

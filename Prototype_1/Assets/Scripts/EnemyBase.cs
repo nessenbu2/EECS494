@@ -6,6 +6,7 @@ public class EnemyBase : MonoBehaviour
     [Header("EnemyBase: Inspector Set General Fields")]
     public int health = 1;
     public float invulnTime = 1.0f;
+    public List<GameObject> powerupPrefabs;
 
     [Header("EnemyBase: Inspector Set General Firing Fields")]
     public GameObject bullet;
@@ -136,6 +137,17 @@ public class EnemyBase : MonoBehaviour
             health -= bullet.bulletDamage;
             if (health <= 0)
             {
+                if (powerupPrefabs.Count != 0)
+                {
+                    GameObject prefab =
+                        powerupPrefabs[Random.Range(0, powerupPrefabs.Count)];
+                    if (prefab != null)
+                    {
+                        GameObject powerup = Instantiate(prefab);
+                        powerup.transform.position = transform.position;
+                    }
+                }
+
                 onDeath();
                 Destroy(gameObject);
             }

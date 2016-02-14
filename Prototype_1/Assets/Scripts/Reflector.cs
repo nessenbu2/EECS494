@@ -7,17 +7,23 @@ public class Reflector : MonoBehaviour
 	public GameObject bulletPrefab;
 
 	public IReflector reflStrategy;
+	public IReflector defaultRefl;
 
 	void Awake()
 	{
 		// reflStrategy = new DefaultReflector();
+		defaultRefl = new DefaultReflector();
 		reflStrategy = new MultiReflector(bulletPrefab);
 	}
 
 	void OnTriggerEnter(Collider coll) {
-		if (coll.gameObject.tag != "SpawnedBullet")
+		Vector3 reflDir = transform.rotation * Vector3.right;
+		if (coll.gameObject.layer == LayerMask.NameToLayer("Enemy"))
 		{
-			Vector3 reflDir = transform.rotation * Vector3.right;
+			defaultRefl.Reflect(coll, reflDir);
+		}
+		else if (coll.gameObject.tag != "SpawnedBullet")
+		{
 			reflStrategy.Reflect(coll, reflDir);
 		}
 	}

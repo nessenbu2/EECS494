@@ -110,10 +110,13 @@ public class Hero : MonoBehaviour {
         staminaBar.Remove(stamina);
         stamina = 0;
 
-        ParticleSystem part = Instantiate(DeathParticles);
-        part.transform.position = transform.position;
-        part.Play();
-        Destroy(part, 20);
+        if (EnemyBase.NumEnemies() != 0)
+        {
+            ParticleSystem part = Instantiate(DeathParticles);
+            part.transform.position = transform.position;
+            part.Play();
+            Destroy(part, 20);
+	}
 
         hero = null;
 

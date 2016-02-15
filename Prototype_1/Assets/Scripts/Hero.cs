@@ -48,7 +48,7 @@ public class Hero : MonoBehaviour {
         enemyLayer = LayerMask.NameToLayer("Enemy");
         hero = this;
         health = _maxHealth = 10;
-        stamina = _maxStamina = 100;
+        stamina = _maxStamina = 200;
         reflector = transform.Find("Reflector").GetComponent<Reflector>();
     }
 

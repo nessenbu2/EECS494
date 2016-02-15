@@ -46,6 +46,7 @@ public class BouncingBullet : BulletBase
         vel = Vector3.Reflect(vel, hit.normal);
         vel.Normalize();
         rigid.velocity = vel * bulletSpeed;
+        transform.position = hit.point;
 
         return;
     }

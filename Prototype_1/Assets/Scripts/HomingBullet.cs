@@ -15,6 +15,11 @@ public class HomingBullet : BulletBase
 
     protected override void onFixedUpdate()
     {
+        if ((Hero.hero == null) && (poi != gameObject))
+        {
+            poi = gameObject;
+        }
+
         Vector3 vel = rigid.velocity;
         vel.Normalize();
 

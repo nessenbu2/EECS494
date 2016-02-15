@@ -29,5 +29,11 @@ public class DefaultReflector : MonoBehaviour, IReflector
 
 			Destroy(coll.gameObject);
 		}
+		else if (coll.attachedRigidbody)
+		{
+			Vector3 vel;
+			vel = reflDir * coll.GetComponent<Rigidbody>().velocity.magnitude;
+			coll.GetComponent<Rigidbody>().velocity = vel;
+		}
 	}
 }

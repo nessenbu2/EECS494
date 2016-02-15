@@ -48,7 +48,7 @@ public class Hero : MonoBehaviour {
         enemyLayer = LayerMask.NameToLayer("Enemy");
         hero = this;
         health = _maxHealth = 10;
-        stamina = _maxStamina = 100;
+        stamina = _maxStamina = 200;
         reflector = transform.Find("Reflector").GetComponent<Reflector>();
     }
 
@@ -207,7 +207,16 @@ public class Hero : MonoBehaviour {
 
         Vector3 target = cam.ScreenToWorldPoint(temp);
         target.z = transform.position.z;
-        transform.LookAt(target, transform.up);
-        transform.rotation *= Quaternion.Euler(new Vector3(0, -90, 0));
+        transform.LookAt(target, Vector3.up);
+
+		float angle = Vector3.Angle(Vector3.right, target - transform.position);
+
+		if (target.y < transform.position.y)
+		{
+			angle *= -1;
+		}
+
+		transform.localEulerAngles = new Vector3(0,0,angle);
+
     }
 }

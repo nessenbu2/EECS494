@@ -55,7 +55,7 @@ public class EnemyBase : MonoBehaviour
         // Ensure that the force "shifts" immediately,
         // i.e. give it an initial random force.
         elapsedForceShiftTime = timeBetweenForceShift;
-        elapsedFireTime = timeBetweenBulletShots;
+        elapsedFireTime = 0f;
         collisionForce = null;
 
         isInvuln = false;

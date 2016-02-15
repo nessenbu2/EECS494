@@ -40,6 +40,12 @@ public class BulletBase : MonoBehaviour
         return;
     }
 
+    void FixedUpdate()
+    {
+        onFixedUpdate();
+        return;
+    }
+
     // This will deal with the bullet hitting other entities.
     // It will not be able to damage the originating enemy.
     // This is a non-virtual interface so that some bullets
@@ -77,7 +83,6 @@ public class BulletBase : MonoBehaviour
         return;
     }
 
-
     // This virtual method allows for varying initializations.
     // The default is to do nothing.
     protected virtual void onStart()
@@ -88,6 +93,13 @@ public class BulletBase : MonoBehaviour
     // This virtual method allows for varying onUpdate actions.
     // The default is to do nothing.
     protected virtual void onUpdate()
+    {
+        return;
+    }
+
+    // This virtual method allows for varying onFixedUpdate actions.
+    // The default is to do nothing.
+    protected virtual void onFixedUpdate()
     {
         return;
     }

@@ -5,11 +5,16 @@ public class MainCamera : MonoBehaviour {
 
     public GameObject hero, deathMenu, victoryMenu;
 
-    private bool spawned = false;
+    private bool victoryMenuSpawned = false;
 
 	void Update ()
     {
-        if (Hero.hero != null && Hero.hero.Dead())
+        if (!victoryMenuSpawned && EnemyBase.NumEnemies() == 0)
+        {
+            victoryMenuSpawned = true;
+            Instantiate(victoryMenu);
+        }
+        if (Hero.hero != null && Hero.hero.Dead() && !victoryMenuSpawned)
         {
             Destroy(hero);
             Instantiate(deathMenu);
@@ -25,10 +30,5 @@ public class MainCamera : MonoBehaviour {
             //pos.y
         }
 
-        if (!spawned && EnemyBase.NumEnemies() == 0)
-        {
-            spawned = true;
-            Instantiate(victoryMenu);
-        }
-	}
+    }
 }

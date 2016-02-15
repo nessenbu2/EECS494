@@ -13,14 +13,17 @@ public abstract class Bar : MonoBehaviour {
     protected abstract Color GetTextColor();
 
 	// Use this for initialization
-	void Start()
+    void Start()
     {
-	    current = GetMax();
+        current = GetMax();
         len = Screen.width / GetFracOfScreen();
-	}
+    }
 	
     void OnGUI()
     {
+    	if (Hero.hero == null)
+            return;
+
         Vector2 loc = GetLocation();
         string display = current + "/" + GetMax();
         GUIStyle style = MakeStyle(20, (int)len);

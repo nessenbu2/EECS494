@@ -64,8 +64,17 @@ public class EnemyBase : MonoBehaviour
     void Start()
     {
         onStart();
+        
+        if (Hero.hero != null)
+        {
+            poi = Hero.hero.gameObject;
+        }
+        else
+        {
+            // I need some kind of default behavior....
+            poi = gameObject;
+        }
 
-        poi = Hero.hero.gameObject;
         return;
     }
 

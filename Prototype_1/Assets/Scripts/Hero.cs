@@ -5,6 +5,7 @@ public class Hero : MonoBehaviour {
 
     public GameObject reflectorPrefab;
     public static Hero hero;
+    public ParticleSystem DeathParticles;
     public float invulnTime = 0.5f;
 
     private float speed = 7.5f;
@@ -108,6 +109,18 @@ public class Hero : MonoBehaviour {
     {
         staminaBar.Remove(stamina);
         stamina = 0;
+
+        if (EnemyBase.NumEnemies() != 0)
+        {
+            ParticleSystem part = Instantiate(DeathParticles);
+            part.transform.position = transform.position;
+            part.Play();
+            Destroy(part, 20);
+	}
+
+        hero = null;
+
+        return;
     }
 
     void OnCollisionEnter(Collision col)
@@ -134,11 +147,11 @@ public class Hero : MonoBehaviour {
         healthBar.Remove(damage);
     }
 
-	public void addHealth(int amount)
-	{
-		health = Mathf.Min(health + amount, maxHealth);
-		healthBar.Add(amount);
-	}
+    public void addHealth(int amount)
+    {
+        health = Mathf.Min(health + amount, maxHealth);
+        healthBar.Add(amount);
+    }
 
     public bool Dead()
     {

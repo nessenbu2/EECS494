@@ -93,15 +93,15 @@ public class Hero : MonoBehaviour {
 
         if (reflOut)
         {
-            stamina -= 2;
-            staminaBar.Remove(2);
+            stamina -= 3;
+            staminaBar.Remove(3);
         }
 
         //staminaTick = Time.time;
         if (stamina < maxStamina)
         {
-            stamina += 1;
-            staminaBar.Add(1);
+            stamina += 2;
+            staminaBar.Add(2);
         }
     }
 

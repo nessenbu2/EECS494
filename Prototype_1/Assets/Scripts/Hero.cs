@@ -108,6 +108,10 @@ public class Hero : MonoBehaviour {
     {
         staminaBar.Remove(stamina);
         stamina = 0;
+
+        hero = null;
+
+        return;
     }
 
     void OnCollisionEnter(Collision col)
@@ -134,11 +138,11 @@ public class Hero : MonoBehaviour {
         healthBar.Remove(damage);
     }
 
-	public void addHealth(int amount)
-	{
-		health = Mathf.Min(health + amount, maxHealth);
-		healthBar.Add(amount);
-	}
+    public void addHealth(int amount)
+    {
+        health = Mathf.Min(health + amount, maxHealth);
+        healthBar.Add(amount);
+    }
 
     public bool Dead()
     {

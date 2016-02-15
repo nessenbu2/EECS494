@@ -17,6 +17,8 @@ public class Hero : MonoBehaviour {
     private int /*bulletLayer,*/ enemyLayer;
     private bool invulnerable = false;
 
+	private Renderer rend;
+
     //private float reflectorCooldown = 0.75f;
     private float lastRefl;
     private float lastDamage;
@@ -50,6 +52,8 @@ public class Hero : MonoBehaviour {
         health = _maxHealth = 10;
         stamina = _maxStamina = 200;
         reflector = transform.Find("Reflector").GetComponent<Reflector>();
+
+		rend = GetComponent<Renderer>();
     }
 
     void Start()
@@ -66,6 +70,22 @@ public class Hero : MonoBehaviour {
         {
             invulnerable = false;    
         }
+
+		if (invulnerable)
+		{
+			if (rend.material.color == Color.white)
+			{
+				rend.material.color = Color.red;
+			}
+			else
+			{
+				rend.material.color = Color.white;
+			}
+		}
+		else
+		{
+			rend.material.color = Color.white;
+		}
 
         Move();
 

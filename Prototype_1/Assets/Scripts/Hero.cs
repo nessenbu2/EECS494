@@ -234,8 +234,6 @@ public class Hero : MonoBehaviour {
 
         Vector3 target = cam.ScreenToWorldPoint(temp);
         target.z = transform.position.z;
-        transform.LookAt(target, Vector3.up);
-
 		float angle = Vector3.Angle(Vector3.right, target - transform.position);
 
 		if (target.y < transform.position.y)

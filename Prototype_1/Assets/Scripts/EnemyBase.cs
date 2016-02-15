@@ -90,6 +90,14 @@ public class EnemyBase : MonoBehaviour
         {
             return;
         }
+		
+		float angle = Vector3.Angle(Vector3.right, poi.transform.position - transform.position);
+		if (poi.transform.position.y < transform.position.y)
+		{
+			angle *= -1;
+		}
+		
+		transform.localEulerAngles = new Vector3(0, 0, angle);
 
         if (isInvuln && ((invulnStartTime + invulnTime) <= Time.time))
         {

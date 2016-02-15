@@ -194,7 +194,16 @@ public class Hero : MonoBehaviour {
 
         Vector3 target = cam.ScreenToWorldPoint(temp);
         target.z = transform.position.z;
-        transform.LookAt(target, transform.up);
-        transform.rotation *= Quaternion.Euler(new Vector3(0, -90, 0));
+        transform.LookAt(target, Vector3.up);
+
+		float angle = Vector3.Angle(Vector3.right, target - transform.position);
+
+		if (target.y < transform.position.y)
+		{
+			angle *= -1;
+		}
+
+		transform.localEulerAngles = new Vector3(0,0,angle);
+
     }
 }

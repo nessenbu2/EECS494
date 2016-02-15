@@ -9,7 +9,7 @@ public class MainCamera : MonoBehaviour {
 
 	void Update ()
     {
-        if (!victoryMenuSpawned && EnemyBase.NumEnemies() == 0)
+        if (!victoryMenuSpawned && EnemyBase.NumEnemies() <= 0)
         {
             victoryMenuSpawned = true;
             Instantiate(victoryMenu);

@@ -1,0 +1,67 @@
+﻿Merge branch 'master' of https://github.com/nessenbu2/EECS494
+
+# Conflicts:
+#	Prototype_1/Assets/Scenes/Level_3/LightingData.asset
+#
+# It looks like you may be committing a merge.
+# If this is not correct, please remove the file
+#	.git/MERGE_HEAD
+# and try again.
+
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Your branch and 'origin/master' have diverged,
+# and have 1 and 17 different commits each, respectively.
+#   (use "git pull" to merge the remote branch into yours)
+#
+# All conflicts fixed but you are still merging.
+#
+# Changes to be committed:
+#	new file:   Prototype_1/Assets/Materials/HeroNoFriction.physicMaterial
+#	new file:   Prototype_1/Assets/Materials/HeroNoFriction.physicMaterial.meta
+#	new file:   Prototype_1/Assets/Materials/PowerupMultishot.mat
+#	new file:   Prototype_1/Assets/Materials/PowerupMultishot.mat.meta
+#	modified:   Prototype_1/Assets/Prefabs/DeathMenu.prefab
+#	modified:   Prototype_1/Assets/Prefabs/EnemySpawner.prefab
+#	modified:   Prototype_1/Assets/Prefabs/EnemySpawner.prefab.meta
+#	modified:   Prototype_1/Assets/Prefabs/Hero.prefab
+#	new file:   Prototype_1/Assets/Prefabs/Main Camera.prefab
+#	new file:   Prototype_1/Assets/Prefabs/Main Camera.prefab.meta
+#	new file:   Prototype_1/Assets/Prefabs/PowerupMultishot.prefab
+#	new file:   Prototype_1/Assets/Prefabs/PowerupMultishot.prefab.meta
+#	new file:   Prototype_1/Assets/Prefabs/Victory Menu.prefab
+#	new file:   Prototype_1/Assets/Prefabs/Victory Menu.prefab.meta
+#	modified:   Prototype_1/Assets/Scenes/DK_EnemyTestScene.unity
+#	modified:   Prototype_1/Assets/Scenes/nick_scene.unity
+#	modified:   Prototype_1/Assets/Scenes/steph_scene.unity
+#	modified:   Prototype_1/Assets/Scripts/BlindEnemy.cs
+#	modified:   Prototype_1/Assets/Scripts/BouncingBullet.cs
+#	modified:   Prototype_1/Assets/Scripts/BulletBase.cs
+#	new file:   Prototype_1/Assets/Scripts/CollectibleBase.cs
+#	new file:   Prototype_1/Assets/Scripts/CollectibleBase.cs.meta
+#	new file:   Prototype_1/Assets/Scripts/CollectibleMulti.cs
+#	new file:   Prototype_1/Assets/Scripts/CollectibleMulti.cs.meta
+#	new file:   Prototype_1/Assets/Scripts/DefaultReflector.cs
+#	new file:   Prototype_1/Assets/Scripts/DefaultReflector.cs.meta
+#	modified:   Prototype_1/Assets/Scripts/EnemyBase.cs
+#	modified:   Prototype_1/Assets/Scripts/EnemySpawner.cs
+#	modified:   Prototype_1/Assets/Scripts/Hero.cs
+#	modified:   Prototype_1/Assets/Scripts/LoadOnClick.cs
+#	modified:   Prototype_1/Assets/Scripts/MainCamera.cs
+#	new file:   Prototype_1/Assets/Scripts/MultiReflector.cs
+#	new file:   Prototype_1/Assets/Scripts/MultiReflector.cs.meta
+#	modified:   Prototype_1/Assets/Scripts/Reflector.cs
+#	new file:   Prototype_1/Assets/Scripts/ReflectorStrategy.cs
+#	new file:   Prototype_1/Assets/Scripts/ReflectorStrategy.cs.meta
+#	modified:   Prototype_1/ProjectSettings/ProjectSettings.asset
+#	modified:   Prototype_1/ProjectSettings/ProjectVersion.txt
+#	modified:   Prototype_1/ProjectSettings/QualitySettings.asset
+#	modified:   Prototype_1/ProjectSettings/TagManager.asset
+#
+# Untracked files:
+#	Prototype_1/Assets/Scenes/Level_6.unity
+#	Prototype_1/Assets/Scenes/Level_6.unity.meta
+#
+

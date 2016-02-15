@@ -60,6 +60,11 @@ public class BulletBase : MonoBehaviour
             return;
         }
 
+		if (other.gameObject.tag == "Collectible")
+		{
+			return;
+		}
+
         if ((LayerMask.NameToLayer("Enemy") == other.gameObject.layer) &&
             ignoreEnemies)
         {

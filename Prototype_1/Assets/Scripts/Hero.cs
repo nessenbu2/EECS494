@@ -93,15 +93,15 @@ public class Hero : MonoBehaviour {
 
         if (reflOut)
         {
-            stamina -= 2;
-            staminaBar.Remove(2);
+            stamina -= 3;
+            staminaBar.Remove(3);
         }
 
         //staminaTick = Time.time;
         if (stamina < maxStamina)
         {
-            stamina += 1;
-            staminaBar.Add(1);
+            stamina += 2;
+            staminaBar.Add(2);
         }
     }
 
@@ -152,6 +152,13 @@ public class Hero : MonoBehaviour {
         health = Mathf.Min(health + amount, maxHealth);
         healthBar.Add(amount);
     }
+
+	public void addSides()
+	{
+		transform.Find("RightReflector").gameObject.SetActive(true);
+		transform.Find("LeftReflector").gameObject.SetActive(true);
+		transform.Find("BackReflector").gameObject.SetActive(true);
+	}
 
     public bool Dead()
     {

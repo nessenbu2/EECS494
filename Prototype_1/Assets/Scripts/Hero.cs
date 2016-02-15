@@ -153,6 +153,13 @@ public class Hero : MonoBehaviour {
         healthBar.Add(amount);
     }
 
+	public void addSides()
+	{
+		transform.Find("RightReflector").gameObject.SetActive(true);
+		transform.Find("LeftReflector").gameObject.SetActive(true);
+		transform.Find("BackReflector").gameObject.SetActive(true);
+	}
+
     public bool Dead()
     {
         return health <= 0;

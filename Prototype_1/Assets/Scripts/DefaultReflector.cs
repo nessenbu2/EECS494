@@ -1,18 +1,33 @@
 using UnityEngine;
 using System.Collections;
 
-public class DefaultReflector : IReflector
+public class DefaultReflector : MonoBehaviour, IReflector
 {
-	public DefaultReflector() {}
+	GameObject bulletPrefab;
+
+	public DefaultReflector(GameObject _bulletPrefab)
+	{
+		bulletPrefab = _bulletPrefab;
+	}
 
 	public void Reflect(Collider coll, Vector3 reflDir)
 	{
-		if (coll.attachedRigidbody)
+		if (coll.attachedRigidbody && coll.gameObject.layer == LayerMask.NameToLayer("Bullet"))
 		{
+			GameObject refl = Instantiate<GameObject>(bulletPrefab);
+			refl.gameObject.tag = "SpawnedBullet";
+			refl.transform.position = coll.transform.position;
+
 			Vector3 vel;
 			vel = reflDir * coll.GetComponent<Rigidbody>().velocity.magnitude;
 
-			coll.GetComponent<Rigidbody>().velocity = vel;
+			refl.GetComponent<Rigidbody>().velocity = vel;
+
+			BulletBase reflBase = refl.GetComponent<BulletBase>();
+			reflBase.ignoreEnemies = false;
+			reflBase.rend.material = reflBase.reflectMat;
+
+			Destroy(coll.gameObject);
 		}
 	}
 }

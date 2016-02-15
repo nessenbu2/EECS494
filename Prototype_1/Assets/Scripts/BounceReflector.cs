@@ -22,6 +22,11 @@ public class BounceReflector : MonoBehaviour, IReflector
 			Vector3 dir = reflDir;
 			Vector3 vel = dir * coll.GetComponent<Rigidbody>().velocity.magnitude;
 			refl.GetComponent<Rigidbody>().velocity = vel;
+
+			BulletBase reflBase = refl.GetComponent<BulletBase>();
+			reflBase.ignoreEnemies = false;
+			reflBase.rend.material = reflBase.reflectMat;
+
 			Destroy(coll.gameObject);
 		}
 	}

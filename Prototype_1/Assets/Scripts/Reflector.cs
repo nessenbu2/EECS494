@@ -10,8 +10,8 @@ public class Reflector : MonoBehaviour
 
 	void Awake()
 	{
-		reflStrategy = new DefaultReflector();
-		defaultRefl = new DefaultReflector();
+		reflStrategy = new DefaultReflector(bulletPrefab);
+		defaultRefl = new DefaultReflector(bulletPrefab);
 	}
 
 	virtual protected void OnTriggerEnter(Collider coll) {

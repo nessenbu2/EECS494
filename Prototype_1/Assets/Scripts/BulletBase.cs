@@ -73,8 +73,11 @@ public class BulletBase : MonoBehaviour
 
         if (LayerMask.NameToLayer("Hero") == other.gameObject.layer)
         {
-            Hero.hero.takeDamage(1);
-            Destroy(gameObject);
+			if (gameObject.tag != "SpawnedBullet")
+			{
+				Hero.hero.takeDamage(1);
+				Destroy(gameObject);
+			}
 
             return;
         }

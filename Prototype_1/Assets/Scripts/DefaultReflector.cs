@@ -19,11 +19,12 @@ public class DefaultReflector : MonoBehaviour, IReflector
 			refl.transform.position = coll.transform.position;
 
 			Vector3 vel;
-			vel = reflDir * coll.GetComponent<Rigidbody>().velocity.magnitude;
-
-			refl.GetComponent<Rigidbody>().velocity = vel;
+			vel = reflDir;
+			vel.Normalize();
 
 			BulletBase reflBase = refl.GetComponent<BulletBase>();
+			refl.GetComponent<Rigidbody>().velocity = vel * reflBase.bulletSpeed;
+
 			reflBase.ignoreEnemies = false;
 			reflBase.rend.material = reflBase.reflectMat;
 

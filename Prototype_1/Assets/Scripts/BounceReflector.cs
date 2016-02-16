@@ -19,13 +19,13 @@ public class BounceReflector : MonoBehaviour, IReflector
 			refl.gameObject.tag = "SpawnedBullet";
 			refl.transform.position = coll.transform.position;
 
-			Vector3 dir = reflDir;
-			Vector3 vel = dir * coll.GetComponent<Rigidbody>().velocity.magnitude;
-			refl.GetComponent<Rigidbody>().velocity = vel;
+			Vector3 vel = reflDir;
+			vel.Normalize();
 
 			BulletBase reflBase = refl.GetComponent<BulletBase>();
 			reflBase.ignoreEnemies = false;
 			reflBase.rend.material = reflBase.reflectMat;
+			refl.GetComponent<Rigidbody>().velocity = vel * reflBase.bulletSpeed;
 
 			Destroy(coll.gameObject);
 		}

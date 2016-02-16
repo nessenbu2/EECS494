@@ -34,12 +34,6 @@ public class MultiReflector : MonoBehaviour, IReflector {
 			Vector3 vel1;
 			Vector3 vel2;
 			Vector3 vel3;
-			vel1 = dir1 * coll.GetComponent<Rigidbody>().velocity.magnitude;
-			refl1.GetComponent<Rigidbody>().velocity = vel1;
-			vel2 = dir2 * coll.GetComponent<Rigidbody>().velocity.magnitude;
-			refl2.GetComponent<Rigidbody>().velocity = vel2;
-			vel3 = dir3 * coll.GetComponent<Rigidbody>().velocity.magnitude;
-			refl3.GetComponent<Rigidbody>().velocity = vel3;
 
 			BulletBase reflBase1 = refl1.GetComponent<BulletBase>();
 			reflBase1.ignoreEnemies = false;
@@ -50,6 +44,16 @@ public class MultiReflector : MonoBehaviour, IReflector {
 			BulletBase reflBase3 = refl3.GetComponent<BulletBase>();
 			reflBase3.ignoreEnemies = false;
 			reflBase3.rend.material = reflBase3.reflectMat;
+
+			vel1 = dir1;
+			vel1.Normalize();
+			refl1.GetComponent<Rigidbody>().velocity = vel1 * reflBase1.bulletSpeed;
+			vel2 = dir2;
+			vel2.Normalize();
+			refl2.GetComponent<Rigidbody>().velocity = vel2 * reflBase2.bulletSpeed;
+			vel3 = dir3;
+			vel3.Normalize();
+			refl3.GetComponent<Rigidbody>().velocity = vel3 * reflBase3.bulletSpeed;
 
 			Destroy(coll.gameObject);
 		}

@@ -27,6 +27,8 @@ public class EnemyBase : MonoBehaviour
     public Rigidbody rigid;
     public bool isInvuln;
     public float invulnStartTime;
+	public Renderer rend;
+	public Color color;
 
     [Header("EnemyBase: Dynamically Set General Firing Fields")]
     public float elapsedFireTime;
@@ -60,6 +62,9 @@ public class EnemyBase : MonoBehaviour
 
         isInvuln = false;
         numEnemies++;
+
+		rend = GetComponent<Renderer>();
+		color = rend.material.color;
 
         return;
     }
@@ -103,6 +108,22 @@ public class EnemyBase : MonoBehaviour
         {
             isInvuln = false;
         }
+
+		if (isInvuln)
+		{
+			if (rend.material.color == color)
+			{
+				rend.material.color = Color.white;
+			}
+			else
+			{
+				rend.material.color = color;
+			}
+		}
+		else
+		{
+			rend.material.color = color;
+		}
 
         elapsedFireTime += Time.deltaTime;
         if (elapsedFireTime < timeBetweenBulletShots)

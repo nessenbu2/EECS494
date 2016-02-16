@@ -15,7 +15,7 @@ public class EnemyStaticBlind : EnemyBase
     // Here in EnemyStaticBlind, this fires in a random direction.
     protected override void fire()
     {
-        randomShot();
+        standardDirectShot();
         return;
     }
 

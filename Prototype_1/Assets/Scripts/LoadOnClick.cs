@@ -22,16 +22,16 @@ public class LoadOnClick : MonoBehaviour
                 LoadLevel("Level_3");
                 break;
             case "Level_3":
-                LoadLevel("Level_4");
-                break;
-            case "Level_4":
                 LoadLevel("Level_5");
                 break;
+            case "Level_4":
+                LoadLevel("Menu");
+                break;
             case "Level_5":
-                LoadLevel("Level_6");
+                LoadLevel("Level_7");
                 break;
             case "Level_6":
-                LoadLevel("Level_7");
+                LoadLevel("Menu");
                 break;
             case "Level_7":
                 LoadLevel("Level_8");
